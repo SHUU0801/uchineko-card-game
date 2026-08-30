@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: uchineko-server
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: CLIENT_ORIGIN
+        value: https://uchineko-client.onrender.com
+
+  - type: web
+    name: uchineko-client
+    runtime: static
+    rootDir: client
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_SERVER_URL
+        value: https://uchineko-server.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

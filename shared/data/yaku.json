@@ -1,0 +1,20 @@
+[
+  { "id": "hesoten_biyori", "name": "へそてん日和", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["gorogoron", "daran"] },
+  { "id": "kezukuroi_jikan", "name": "毛づくろい時間", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["peropero", "punipuni"] },
+  { "id": "undoukai_no_yokan", "name": "運動会の予感", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["wakuwaku", "nobinobi"] },
+  { "id": "hako_hitorijime", "name": "箱をひとりじめ", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["wakuwaku", "suppori"] },
+  { "id": "mou_nemui_nya", "name": "もう眠いにゃ", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["fuwaa", "suyasuya"] },
+  { "id": "shiawase_time", "name": "しあわせタイム", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["gorogoron", "momimomi"] },
+  { "id": "onaka_ippai", "name": "おなかいっぱい", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["daran", "mogumogu"] },
+  { "id": "gohan_machi", "name": "ごはん待ち", "category": "arualu", "matchType": "attributeMultiset", "cardCount": 2, "requiredAttributes": ["mogumogu", "chokon"] },
+
+  { "id": "tabetara_neru_nya", "name": "食べたら寝るにゃ", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["peropero", "suyasuya", "mogumogu"] },
+  { "id": "manzoku_na_hakoiri", "name": "満足な箱入り", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["wakuwaku", "suppori", "chokon"] },
+  { "id": "kanzen_muboubi", "name": "完全無防備", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["gorogoron", "daran", "suyasuya"] },
+  { "id": "amaama_kyun", "name": "あまあまきゅん", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["gorogoron", "momimomi", "punipuni"] },
+  { "id": "oyasumi_routine", "name": "おやすみルーティン", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["peropero", "fuwaa", "suyasuya"] },
+  { "id": "dai_undoukai", "name": "大運動会", "category": "kyunkyun", "matchType": "attributeMultiset", "cardCount": 3, "requiredAttributes": ["daran", "wakuwaku", "nobinobi"] },
+  { "id": "dai_shuukai", "name": "大集会", "category": "kyunkyun", "matchType": "distinctColorSet", "cardCount": 5, "requiredDistinctColors": 5 },
+
+  { "id": "generic_pair", "name": null, "category": "pair", "matchType": "samePairAttribute", "cardCount": 2 }
+]

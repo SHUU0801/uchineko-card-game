@@ -1,0 +1,14 @@
+[
+  { "id": "gorogoron", "name": "ごろ〜ん", "color": "red" },
+  { "id": "daran", "name": "だら〜ん", "color": "red" },
+  { "id": "peropero", "name": "ぺろぺろ", "color": "blue" },
+  { "id": "wakuwaku", "name": "わくわく", "color": "blue" },
+  { "id": "punipuni", "name": "ぷにぷに", "color": "green" },
+  { "id": "momimomi", "name": "もみもみ", "color": "green" },
+  { "id": "fuwaa", "name": "ふわあぁ", "color": "purple" },
+  { "id": "suyasuya", "name": "すやすや", "color": "purple" },
+  { "id": "mogumogu", "name": "もぐもぐ", "color": "orange" },
+  { "id": "nobinobi", "name": "のびのび", "color": "navy" },
+  { "id": "chokon", "name": "ちょこん", "color": "navy" },
+  { "id": "suppori", "name": "すっぽり", "color": "lightblue" }
+]

@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* 属性カードの色分け。tailwind.config.js の theme.extend は v4 のCSSファーストエンジンでは
+   自動で読み込まれないため、@theme で明示的に定義する。 */
+@theme {
+  --color-cat-red: #ef4444;
+  --color-cat-blue: #3b82f6;
+  --color-cat-green: #22c55e;
+  --color-cat-purple: #a855f7;
+  --color-cat-orange: #f97316;
+  --color-cat-navy: #1e3a8a;
+  --color-cat-lightblue: #7dd3fc;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0f172a;
+  color: #f1f5f9;
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
+}

@@ -1,0 +1,40 @@
+{
+  "catCards": [
+    { "id": "cat_gorogoron_1", "type": "cat", "attribute": "gorogoron" },
+    { "id": "cat_gorogoron_2", "type": "cat", "attribute": "gorogoron" },
+    { "id": "cat_daran_1", "type": "cat", "attribute": "daran" },
+    { "id": "cat_daran_2", "type": "cat", "attribute": "daran" },
+    { "id": "cat_peropero_1", "type": "cat", "attribute": "peropero" },
+    { "id": "cat_peropero_2", "type": "cat", "attribute": "peropero" },
+    { "id": "cat_wakuwaku_1", "type": "cat", "attribute": "wakuwaku" },
+    { "id": "cat_wakuwaku_2", "type": "cat", "attribute": "wakuwaku" },
+    { "id": "cat_punipuni_1", "type": "cat", "attribute": "punipuni" },
+    { "id": "cat_punipuni_2", "type": "cat", "attribute": "punipuni" },
+    { "id": "cat_momimomi_1", "type": "cat", "attribute": "momimomi" },
+    { "id": "cat_momimomi_2", "type": "cat", "attribute": "momimomi" },
+    { "id": "cat_fuwaa_1", "type": "cat", "attribute": "fuwaa" },
+    { "id": "cat_fuwaa_2", "type": "cat", "attribute": "fuwaa" },
+    { "id": "cat_suyasuya_1", "type": "cat", "attribute": "suyasuya" },
+    { "id": "cat_suyasuya_2", "type": "cat", "attribute": "suyasuya" },
+    { "id": "cat_mogumogu_1", "type": "cat", "attribute": "mogumogu" },
+    { "id": "cat_mogumogu_2", "type": "cat", "attribute": "mogumogu" },
+    { "id": "cat_nobinobi_1", "type": "cat", "attribute": "nobinobi" },
+    { "id": "cat_nobinobi_2", "type": "cat", "attribute": "nobinobi" },
+    { "id": "cat_chokon_1", "type": "cat", "attribute": "chokon" },
+    { "id": "cat_chokon_2", "type": "cat", "attribute": "chokon" },
+    { "id": "cat_suppori_1", "type": "cat", "attribute": "suppori" },
+    { "id": "cat_suppori_2", "type": "cat", "attribute": "suppori" }
+  ],
+  "allmightyCards": [
+    { "id": "allmighty_red", "type": "allmighty", "color": "red" },
+    { "id": "allmighty_blue", "type": "allmighty", "color": "blue" },
+    { "id": "allmighty_green", "type": "allmighty", "color": "green" },
+    { "id": "allmighty_purple", "type": "allmighty", "color": "purple" },
+    { "id": "allmighty_orange", "type": "allmighty", "color": "orange" },
+    { "id": "allmighty_navy", "type": "allmighty", "color": "navy" }
+  ],
+  "specialCards": [
+    { "id": "dassou_1", "type": "dassou" },
+    { "id": "kimagure_1", "type": "kimagure" }
+  ]
+}
