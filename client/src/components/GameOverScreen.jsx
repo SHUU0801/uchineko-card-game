@@ -8,7 +8,7 @@ export function GameOverScreen() {
   const reset = useGameStore((s) => s.reset);
 
   if (!gameOverInfo) {
-    return <div className="p-6 text-center text-slate-400">結果を集計しています…</div>;
+    return <div className="p-6 text-center" style={{ color: '#8b7355' }}>結果を集計しています…</div>;
   }
 
   const { winnerIndex, finalScores } = gameOverInfo;
@@ -28,29 +28,44 @@ export function GameOverScreen() {
   };
 
   return (
-    <div className="max-w-sm mx-auto p-6 flex flex-col gap-4 text-center">
-      <h2 className="text-3xl font-bold">{iWon ? '🎉 勝利！' : '😿 敗北…'}</h2>
-      <p className="text-sm text-slate-300">
-        あなたのハウス: {finalScores[myIndex]}匹 ／ 相手のハウス: {finalScores[opponentIndex]}匹
-      </p>
+    <div className="max-w-sm mx-auto p-6 flex flex-col gap-5 text-center pt-12">
+      <div className="text-6xl mb-1" style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))' }}>
+        {iWon ? '🎉' : '😿'}
+      </div>
+      <h2
+        className="text-3xl font-black"
+        style={{
+          color: iWon ? '#f0d68a' : '#c4a882',
+          textShadow: iWon ? '0 0 20px rgba(212,164,74,0.4)' : 'none',
+        }}
+      >
+        {iWon ? '勝利！' : '敗北…'}
+      </h2>
+      <div className="game-panel p-4">
+        <p className="text-sm font-bold" style={{ color: '#c4a882' }}>
+          あなたのハウス: <span style={{ color: '#f0d68a', fontSize: '18px' }}>{finalScores[myIndex]}</span>匹
+          <span style={{ color: '#5c3d2e' }}> ／ </span>
+          相手のハウス: <span style={{ color: '#f0d68a', fontSize: '18px' }}>{finalScores[opponentIndex]}</span>匹
+        </p>
+      </div>
 
       <button
         onClick={requestRematch}
         disabled={iVoted}
-        className="py-3 rounded-xl bg-amber-600 disabled:bg-slate-700 disabled:text-slate-400 font-bold"
+        className="game-btn game-btn-gold"
       >
-        🔁 もう一度対戦する
+        もう一度対戦する
       </button>
       {iVoted && (
-        <p className="text-xs text-slate-400">
+        <p className="text-xs font-bold" style={{ color: '#8b7355' }}>
           {opponentVoted ? 'まもなく再戦を開始します…' : '相手の返答を待っています…'}
         </p>
       )}
       {!iVoted && opponentVoted && (
-        <p className="text-xs text-amber-300">相手が再戦を希望しています！</p>
+        <p className="text-xs font-bold" style={{ color: '#d4a44a' }}>相手が再戦を希望しています！</p>
       )}
 
-      <button onClick={backToHome} className="py-3 rounded-xl bg-slate-700 font-bold">
+      <button onClick={backToHome} className="game-btn game-btn-neutral">
         ホームに戻る
       </button>
     </div>

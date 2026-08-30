@@ -22,7 +22,7 @@ export function SetupScreen() {
   const toggle = (cardId) => {
     if (iAmReady) return;
     const alreadySelected = selection.fieldCardIds.includes(cardId);
-    if (!alreadySelected && chosenCount >= 4) return; // 4枚まで
+    if (!alreadySelected && chosenCount >= 4) return;
     toggleFieldCardSelection(cardId);
   };
 
@@ -35,8 +35,8 @@ export function SetupScreen() {
       <div className="flex justify-end">
         <YakuListButton />
       </div>
-      <h2 className="text-lg font-bold">場札にする4枚を選んでください</h2>
-      <p className="text-xs text-slate-400">
+      <h2 className="text-lg font-black" style={{ color: '#f0d68a' }}>場札にする4枚を選んでください</h2>
+      <p className="text-xs" style={{ color: '#8b7355' }}>
         8枚引きました。このうち4枚を表向きの「場札」にします。残りの4枚は非公開の「手札」になります。（{chosenCount} / 4 選択中）
       </p>
 
@@ -59,12 +59,12 @@ export function SetupScreen() {
       <button
         onClick={confirm}
         disabled={!canConfirm}
-        className="py-3 rounded-xl bg-emerald-600 disabled:bg-slate-700 disabled:text-slate-500 font-bold"
+        className="game-btn game-btn-primary"
       >
         {iAmReady ? '選択済み' : 'この4枚に決定する'}
       </button>
 
-      <p className="text-xs text-slate-400">
+      <p className="text-xs font-bold" style={{ color: '#8b7355' }}>
         {iAmReady
           ? opponentReady
             ? 'まもなく開始します…'

@@ -22,16 +22,19 @@ export function KimagurePicker() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-slate-800 rounded-xl p-4 max-w-md w-full">
-        <h3 className="text-sm font-bold mb-3">きまぐれ：相手の場札を1枚選んで戻させます</h3>
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h3 className="text-sm font-black mb-4" style={{ color: '#f0d68a' }}>
+          きまぐれ：相手の場札を1枚選んで戻させます
+        </h3>
         <div className="flex gap-2 flex-wrap justify-center">
           {view.opponent.field.map((card) => (
             <Card key={card.id} card={card} onClick={() => pickTarget(card.id)} />
           ))}
         </div>
         <button
-          className="mt-3 text-xs text-slate-400 underline"
+          className="mt-4 text-xs font-bold cursor-pointer"
+          style={{ color: '#8b7355', textDecoration: 'underline' }}
           onClick={() => setPendingKimagureTarget(false)}
         >
           キャンセル

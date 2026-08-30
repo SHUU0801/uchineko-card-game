@@ -15,16 +15,21 @@ export function HomeScreen() {
   };
 
   return (
-    <div className="max-w-sm mx-auto p-6 flex flex-col gap-6 text-center">
-      <h1 className="text-2xl font-bold">🐱 うちねこカードゲーム</h1>
-      <p className="text-xs text-slate-400">{connected ? 'サーバーに接続済み' : 'サーバーに接続中…'}</p>
+    <div className="max-w-sm mx-auto p-6 flex flex-col gap-5 text-center pt-12">
+      <div className="mb-2">
+        <div className="text-5xl mb-2" style={{ filter: 'drop-shadow(0 2px 8px rgba(212,164,74,0.3))' }}>🐱</div>
+        <h1 className="game-title">うちねこカードゲーム</h1>
+        <p className="text-xs mt-2" style={{ color: '#8b7355' }}>
+          {connected ? 'サーバーに接続済み' : 'サーバーに接続中…'}
+        </p>
+      </div>
 
       <RulesButton />
 
       <button
         onClick={createRoom}
         disabled={!connected}
-        className="py-3 rounded-xl bg-emerald-600 disabled:bg-slate-700 font-bold"
+        className="game-btn game-btn-primary"
       >
         ルームを作成する
       </button>
@@ -32,9 +37,9 @@ export function HomeScreen() {
       <button
         onClick={createCpuRoom}
         disabled={!connected}
-        className="py-3 rounded-xl bg-purple-600 disabled:bg-slate-700 font-bold"
+        className="game-btn game-btn-purple"
       >
-        🤖 CPUと対戦する
+        CPUと対戦する
       </button>
 
       <div className="flex flex-col gap-2">
@@ -43,12 +48,18 @@ export function HomeScreen() {
           onChange={(e) => setJoinCode(e.target.value)}
           placeholder="ルームコードを入力"
           maxLength={6}
-          className="py-2 px-3 rounded-lg bg-slate-800 border border-slate-600 text-center tracking-widest uppercase"
+          className="py-3 px-4 rounded-lg text-center tracking-widest uppercase font-bold"
+          style={{
+            background: 'rgba(13, 8, 6, 0.6)',
+            border: '2px solid #5c3d2e',
+            color: '#f0d68a',
+            fontSize: '18px',
+          }}
         />
         <button
           onClick={joinRoom}
           disabled={!connected || !joinCode.trim()}
-          className="py-3 rounded-xl bg-blue-600 disabled:bg-slate-700 font-bold"
+          className="game-btn game-btn-gold"
         >
           ルームに参加する
         </button>

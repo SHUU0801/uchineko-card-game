@@ -3,7 +3,7 @@ import { Card } from '../Card';
 export function FieldZone({ label, cards, selectable = false, selectedIds = [], onToggle, disabled = false, glowIds = [], newCardIds = null, flyFromId = null }) {
   return (
     <div>
-      <div className="text-xs text-slate-400 mb-1">{label}（{cards.length}枚）</div>
+      <span className="zone-label">{label}（{cards.length}枚）</span>
       <div className="flex gap-2 flex-wrap">
         {cards.map((card) => (
           <Card

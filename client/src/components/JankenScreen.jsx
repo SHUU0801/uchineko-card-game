@@ -26,21 +26,23 @@ export function JankenScreen() {
 
   if (view.phase === 'janken') {
     return (
-      <div className="max-w-sm mx-auto p-6 flex flex-col gap-4 text-center">
-        <h2 className="text-lg font-bold">🐱 さいしょはにゃんじゃんけん！</h2>
-        <p className="text-xs text-slate-400">勝った方が先攻・後攻を選べます</p>
+      <div className="max-w-sm mx-auto p-6 flex flex-col gap-5 text-center pt-12">
+        <h2 className="game-title text-xl">さいしょはにゃんじゃんけん！</h2>
+        <p className="text-xs" style={{ color: '#8b7355' }}>勝った方が先攻・後攻を選べます</p>
 
         {myChoice ? (
-          <p className="text-sm text-slate-300">
-            {HAND_INFO[myChoice].emoji} を出しました。{opponentHasChosen ? '結果を判定しています…' : '相手を待っています…'}
-          </p>
+          <div className="game-panel p-4">
+            <p className="text-sm font-bold" style={{ color: '#c4a882' }}>
+              {HAND_INFO[myChoice].emoji} を出しました。{opponentHasChosen ? '結果を判定しています…' : '相手を待っています…'}
+            </p>
+          </div>
         ) : (
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-4">
             {Object.entries(HAND_INFO).map(([hand, info]) => (
               <button
                 key={hand}
                 onClick={() => throwHand(hand)}
-                className="w-20 h-20 rounded-xl bg-slate-700 hover:bg-slate-600 text-3xl flex items-center justify-center"
+                className="janken-btn"
                 title={info.label}
               >
                 {info.emoji}
@@ -52,40 +54,35 @@ export function JankenScreen() {
     );
   }
 
-  // phase === 'janken_choice'
   const iAmWinner = winnerIndex === myIndex;
   const myHand = revealedChoices ? revealedChoices[myIndex] : null;
   const opponentHand = revealedChoices ? revealedChoices[opponentIndex] : null;
 
   return (
-    <div className="max-w-sm mx-auto p-6 flex flex-col gap-4 text-center">
-      <h2 className="text-lg font-bold">🐱 さいしょはにゃんじゃんけん！</h2>
-      <div className="flex justify-center items-center gap-6 text-4xl">
-        <span>{HAND_INFO[myHand]?.emoji}</span>
-        <span className="text-sm text-slate-400">vs</span>
-        <span>{HAND_INFO[opponentHand]?.emoji}</span>
+    <div className="max-w-sm mx-auto p-6 flex flex-col gap-5 text-center pt-12">
+      <h2 className="game-title text-xl">さいしょはにゃんじゃんけん！</h2>
+      <div className="flex justify-center items-center gap-6 text-5xl my-2">
+        <span style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>{HAND_INFO[myHand]?.emoji}</span>
+        <span className="text-sm font-black" style={{ color: '#5c3d2e' }}>VS</span>
+        <span style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>{HAND_INFO[opponentHand]?.emoji}</span>
       </div>
 
       {iAmWinner ? (
         <>
-          <p className="text-sm font-bold text-emerald-400">あなたの勝ちです！先攻・後攻を選んでください</p>
+          <p className="text-sm font-black" style={{ color: '#4ade80' }}>あなたの勝ちです！先攻・後攻を選んでください</p>
           <div className="flex justify-center gap-3">
-            <button
-              onClick={() => chooseTurnOrder(true)}
-              className="px-4 py-3 rounded-xl bg-emerald-600 font-bold"
-            >
+            <button onClick={() => chooseTurnOrder(true)} className="game-btn game-btn-primary">
               先攻を選ぶ
             </button>
-            <button
-              onClick={() => chooseTurnOrder(false)}
-              className="px-4 py-3 rounded-xl bg-slate-700 font-bold"
-            >
+            <button onClick={() => chooseTurnOrder(false)} className="game-btn game-btn-neutral">
               後攻を選ぶ
             </button>
           </div>
         </>
       ) : (
-        <p className="text-sm text-slate-300">相手の勝ちです。相手が先攻・後攻を選んでいます…</p>
+        <div className="game-panel p-4">
+          <p className="text-sm font-bold" style={{ color: '#c4a882' }}>相手の勝ちです。相手が先攻・後攻を選んでいます…</p>
+        </div>
       )}
     </div>
   );

@@ -22,8 +22,6 @@ export function ActionBar() {
   const selectedFieldCards = view.me.field.filter((c) => selection.fieldCardIds.includes(c.id));
   const selectedCards = [selectedHandCard, ...selectedFieldCards].filter(Boolean);
 
-  // 現在の選択が、サーバーが提示した「作れる役」のどれかにちょうど一致しているか
-  // （オールマイティの属性割当はサーバー側で自動的に解決されるため、ここでは組み合わせの一致だけ見ればよい）
   const possibleYaku = view.me.possibleYaku || [];
   const matchesAHint =
     !!selection.handCardId &&
@@ -65,43 +63,28 @@ export function ActionBar() {
   };
 
   return (
-    <div className="bg-slate-800/80 rounded-xl p-3 flex flex-wrap items-center gap-2">
-      <span className="text-xs text-slate-400 mr-2">
+    <div className="game-panel p-3 flex flex-wrap items-center gap-2">
+      <span className="text-xs font-bold mr-1" style={{ color: '#8b7355' }}>
         {isMyTurn ? 'あなたの番です' : '相手の番です'}
       </span>
-      <button
-        onClick={attemptYaku}
-        disabled={!canAttemptYaku}
-        className="px-3 py-2 rounded-lg bg-emerald-600 disabled:bg-slate-700 disabled:text-slate-500 text-sm font-bold"
-      >
+      <button onClick={attemptYaku} disabled={!canAttemptYaku} className="game-btn game-btn-primary text-xs">
         役を成立させる
       </button>
-      <button
-        onClick={activateDassou}
-        disabled={!canDassou}
-        className="px-3 py-2 rounded-lg bg-rose-600 disabled:bg-slate-700 disabled:text-slate-500 text-sm font-bold"
-      >
+      <button onClick={activateDassou} disabled={!canDassou} className="game-btn game-btn-danger text-xs">
         だっそう発動
       </button>
-      <button
-        onClick={openKimagurePicker}
-        disabled={!canKimagure}
-        className="px-3 py-2 rounded-lg bg-amber-600 disabled:bg-slate-700 disabled:text-slate-500 text-sm font-bold"
-      >
+      <button onClick={openKimagurePicker} disabled={!canKimagure} className="game-btn game-btn-warn text-xs">
         きまぐれ発動
       </button>
-      <button
-        onClick={pass}
-        disabled={!isMyTurn}
-        className="px-3 py-2 rounded-lg bg-slate-600 disabled:bg-slate-700 disabled:text-slate-500 text-sm font-bold"
-      >
+      <button onClick={pass} disabled={!isMyTurn} className="game-btn game-btn-neutral text-xs">
         パス
       </button>
       <button
         onClick={clearSelection}
-        className="px-3 py-2 rounded-lg bg-transparent border border-slate-600 text-slate-400 text-sm"
+        className="text-xs font-bold px-3 py-2 rounded-lg cursor-pointer"
+        style={{ color: '#8b7355', border: '1px solid #5c3d2e', background: 'transparent' }}
       >
-        選択をクリア
+        選択クリア
       </button>
     </div>
   );

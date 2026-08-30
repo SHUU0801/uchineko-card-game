@@ -22,8 +22,6 @@ export function Board() {
   const clearError = useGameStore((s) => s.clearError);
   const opponentLeft = useGameStore((s) => s.opponentLeft);
 
-  // 山札から新しく増えたカード（ドロー・場札補充）を検出し、山札パイルから飛んでくる演出をつける。
-  // viewがまだ無い最初の一瞬でもフックの呼び出し順は変えない。
   const myHandNewIds = useNewCardIds(view ? view.me.hand : []);
   const myFieldNewIds = useNewCardIds(view ? view.me.field : []);
   const opponentFieldNewIds = useNewCardIds(view ? view.opponent.field : []);
@@ -32,17 +30,13 @@ export function Board() {
   const isMyPkTurn = view ? view.phase === 'pk' && view.pk && !view.pk.myActed : false;
 
   if (!view) {
-    return <div className="p-6 text-center text-slate-400">対戦相手を待っています…</div>;
+    return <div className="p-6 text-center" style={{ color: '#8b7355' }}>対戦相手を待っています…</div>;
   }
 
   const selectHandCard = (cardId) => setHandCard(selection.handCardId === cardId ? null : cardId);
 
-  // このカード・組み合わせなら役が作れるかもしれない、という光るヒント（非権威・UI補助のみ）。
-  // オールマイティが絡む組み合わせもサーバー側で属性を自動解決した上でヒントに含まれる。
   const possibleYaku = view.me.possibleYaku || [];
   const hintsActive = isMyTurn && !selection.handCardId;
-  // 手札を選んだ後は、すでに選んだ場札を全て含む候補だけに絞り込み、残りの場札を光らせる
-  // （3枚役・5枚役で1枚ずつ選んでいく過程でも正しく絞り込まれる）
   const candidatesForSelectedHand =
     isMyTurn && selection.handCardId
       ? possibleYaku.filter(
@@ -51,7 +45,6 @@ export function Board() {
       : [];
   const glowHandIds = hintsActive ? [...new Set(possibleYaku.map((p) => p.handCardId))] : [];
 
-  // サドンデス中は「引いた1枚」が固定の手札役なので、場札側だけ絞り込んで光らせる
   const pkCandidates =
     isMyPkTurn && view.pk
       ? (view.pk.possibleYaku || []).filter((p) =>
@@ -65,22 +58,22 @@ export function Board() {
       ? [...new Set(pkCandidates.flatMap((p) => p.fieldCardIds))]
       : [];
 
-  let turnBannerClass = 'bg-slate-700 text-slate-300';
+  let turnBannerClass = 'turn-banner turn-banner-opponent';
   let turnBannerText = '相手の番です';
   if (view.phase === 'pk') {
-    turnBannerClass = 'bg-purple-700 text-white';
+    turnBannerClass = 'turn-banner turn-banner-pk';
     turnBannerText = isMyPkTurn ? 'サドンデス：あなたの番です' : 'サドンデス：相手の入力を待っています';
   } else if (isMyTurn) {
-    turnBannerClass = 'bg-emerald-600 text-white animate-pulse';
+    turnBannerClass = 'turn-banner turn-banner-mine';
     turnBannerText = 'あなたの番です';
   }
 
   return (
     <div className="max-w-3xl mx-auto p-4 flex flex-col gap-4">
-      <div className={`rounded-xl py-2 text-center font-bold ${turnBannerClass}`}>{turnBannerText}</div>
+      <div className={turnBannerClass}>{turnBannerText}</div>
 
-      <div className="flex justify-between items-center text-xs text-slate-400">
-        <span>ルーム: {roomCode}</span>
+      <div className="flex justify-between items-center text-xs" style={{ color: '#8b7355' }}>
+        <span className="font-bold">Room: {roomCode}</span>
         <span>
           手番: {view.turnCountPerPlayer[view.myIndex]} / 4（自分） ・{' '}
           {view.turnCountPerPlayer[view.myIndex === 0 ? 1 : 0]} / 4（相手）
@@ -89,12 +82,15 @@ export function Board() {
       </div>
 
       {opponentLeft && (
-        <div className="bg-red-900/60 rounded-lg p-2 text-sm text-center">相手が退出しました</div>
+        <div className="game-panel p-3 text-sm text-center font-bold" style={{ borderColor: '#dc2626', color: '#ef4444' }}>
+          相手が退出しました
+        </div>
       )}
 
       {errorMessage && (
         <div
-          className="bg-red-900/60 rounded-lg p-2 text-sm text-center cursor-pointer"
+          className="game-panel p-3 text-sm text-center cursor-pointer font-bold"
+          style={{ borderColor: '#dc2626', color: '#ef4444' }}
           onClick={clearError}
         >
           {errorMessage}（クリックで閉じる）
@@ -102,7 +98,11 @@ export function Board() {
       )}
 
       {lastActionResult && lastActionResult.kind !== 'pass' && (
-        <div key={lastActionSeq} className="animate-yaku-flash bg-emerald-900/60 rounded-lg p-2 text-sm text-center font-bold">
+        <div
+          key={lastActionSeq}
+          className="animate-yaku-flash game-panel-gold p-3 text-sm text-center font-black"
+          style={{ color: '#f0d68a' }}
+        >
           {lastActionResult.kind === 'yaku' && `🎉 役成立: ${lastActionResult.yakuName}`}
           {lastActionResult.kind === 'pair' && `🎉 ペア役成立: ${lastActionResult.yakuName || 'ペア'}`}
           {lastActionResult.kind === 'dassou' && '💨 だっそう発動！相手のハウスをリセット'}
@@ -110,6 +110,7 @@ export function Board() {
         </div>
       )}
 
+      {/* 相手エリア */}
       <div className="space-y-2">
         <div className="flex items-start gap-3">
           <DeckPile id="deck-pile-opponent" count={view.opponent.deckCount} label="相手の山札" />
@@ -126,8 +127,10 @@ export function Board() {
         <HouseZone label="相手のハウス" cards={view.opponent.house} />
       </div>
 
-      <div className="border-t border-slate-700" />
+      {/* 区切り線 */}
+      <div style={{ borderTop: '1px solid rgba(212, 164, 74, 0.15)' }} />
 
+      {/* 自分エリア */}
       <div className="space-y-2">
         <HouseZone label="自分のハウス" cards={view.me.house} />
         <div className="flex items-start gap-3">

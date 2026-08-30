@@ -1,15 +1,35 @@
-// 山札の見た目（伏せカードを重ねたスタック）。ドロー演出の飛び出し元(id)としても使う。
 export function DeckPile({ id, count, label }) {
   return (
     <div className="flex flex-col items-center gap-1 shrink-0">
       <div id={id} className="relative w-14 h-20">
-        <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-lg border-2 border-slate-700 bg-slate-800" />
-        <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-lg border-2 border-slate-700 bg-slate-800" />
-        <div className="absolute inset-0 rounded-lg border-2 border-slate-500 bg-slate-800 flex items-center justify-center text-lg">
-          🐾
+        <div
+          className="absolute inset-0 rounded-lg"
+          style={{
+            transform: 'translate(3px, 3px)',
+            background: 'linear-gradient(135deg, #2d1b12 0%, #1a0f0a 100%)',
+            border: '2px solid #3d2a1e',
+          }}
+        />
+        <div
+          className="absolute inset-0 rounded-lg"
+          style={{
+            transform: 'translate(1.5px, 1.5px)',
+            background: 'linear-gradient(135deg, #2d1b12 0%, #1a0f0a 100%)',
+            border: '2px solid #4d3a2e',
+          }}
+        />
+        <div
+          className="absolute inset-0 rounded-lg flex items-center justify-center text-lg"
+          style={{
+            background: 'linear-gradient(135deg, #3d2a1e 0%, #2d1b12 100%)',
+            border: '2px solid #5c3d2e',
+            boxShadow: 'inset 0 1px 0 rgba(212,164,74,0.1), 0 2px 6px rgba(0,0,0,0.4)',
+          }}
+        >
+          <span className="opacity-50">🐾</span>
         </div>
       </div>
-      <span className="text-[10px] text-slate-400 whitespace-nowrap">
+      <span className="text-[10px] font-bold whitespace-nowrap" style={{ color: '#8b7355' }}>
         {label}（{count}枚）
       </span>
     </div>
