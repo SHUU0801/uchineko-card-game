@@ -1,27 +1,14 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap');
 
 @theme {
-  --color-cat-red: #dc2626;
-  --color-cat-blue: #2563eb;
-  --color-cat-green: #16a34a;
-  --color-cat-purple: #9333ea;
-  --color-cat-orange: #ea580c;
-  --color-cat-navy: #1e3a8a;
-  --color-cat-lightblue: #38bdf8;
-
-  --color-wood-darkest: #0d0806;
-  --color-wood-dark: #1a0f0a;
-  --color-wood-mid: #2d1b12;
-  --color-wood-light: #3d2a1e;
-  --color-wood-lighter: #5c3d2e;
-
-  --color-gold: #d4a44a;
-  --color-gold-light: #f0d68a;
-  --color-gold-dark: #8b6914;
-
-  --color-parchment: #f5e6d3;
-  --color-parchment-dim: #c4a882;
+  --color-cat-red: #c0392b;
+  --color-cat-blue: #2980b9;
+  --color-cat-green: #27ae60;
+  --color-cat-purple: #8e44ad;
+  --color-cat-orange: #d35400;
+  --color-cat-navy: #2c3e6e;
+  --color-cat-lightblue: #5dade2;
 }
 
 html, body, #root {
@@ -31,45 +18,10 @@ html, body, #root {
   padding: 0;
 }
 
-html {
-  background-color: #0d0806;
-}
-
 body {
-  background: radial-gradient(ellipse at 50% 30%, #2d1b12 0%, #1a0f0a 40%, #0d0806 100%);
-  background-attachment: fixed;
-  color: #f5e6d3;
-  font-family: 'Zen Maru Gothic', 'Hiragino Sans', 'Yu Gothic', sans-serif;
-}
-
-/* ===== 木目テクスチャのオーバーレイ ===== */
-#root::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.04;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 3px,
-      rgba(210, 160, 80, 0.3) 3px,
-      rgba(210, 160, 80, 0.3) 4px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 20px,
-      rgba(210, 160, 80, 0.15) 20px,
-      rgba(210, 160, 80, 0.15) 21px
-    );
-}
-
-#root {
-  position: relative;
-  z-index: 1;
+  background-color: #1a1210;
+  color: #e8ddd0;
+  font-family: 'M PLUS Rounded 1c', 'Hiragino Sans', 'Yu Gothic', sans-serif;
 }
 
 /* ===== カードアニメーション ===== */
@@ -90,198 +42,98 @@ body {
   animation: yaku-flash 0.4s ease-out;
 }
 
-/* ===== ゲームUI共通スタイル ===== */
-
-/* 装飾パネル（モーダル・ゾーン背景） */
-.game-panel {
-  background: linear-gradient(135deg, #2d1b12 0%, #1a0f0a 100%);
-  border: 2px solid #5c3d2e;
-  border-radius: 12px;
-  box-shadow:
-    0 0 0 1px rgba(212, 164, 74, 0.15),
-    inset 0 1px 0 rgba(212, 164, 74, 0.1),
-    0 8px 24px rgba(0, 0, 0, 0.5);
-}
-
-.game-panel-gold {
-  background: linear-gradient(135deg, #2d1b12 0%, #1a0f0a 100%);
-  border: 2px solid #8b6914;
-  border-radius: 12px;
-  box-shadow:
-    0 0 0 1px rgba(212, 164, 74, 0.3),
-    inset 0 1px 0 rgba(240, 214, 138, 0.15),
-    0 8px 24px rgba(0, 0, 0, 0.5);
-}
-
-/* ゲームボタン */
-.game-btn {
-  position: relative;
-  font-weight: 700;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  border: 2px solid;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-}
-.game-btn:active:not(:disabled) {
-  transform: translateY(1px);
-}
-.game-btn:disabled {
-  opacity: 0.4;
-  cursor: default;
-  filter: grayscale(0.6);
-}
-
-.game-btn-primary {
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
-  border-color: #15803d;
-  color: white;
-  box-shadow: 0 3px 0 #14532d, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-primary:active:not(:disabled) {
-  box-shadow: 0 1px 0 #14532d;
-}
-.game-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
-}
-
-.game-btn-danger {
-  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
-  border-color: #b91c1c;
-  color: white;
-  box-shadow: 0 3px 0 #7f1d1d, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-danger:active:not(:disabled) {
-  box-shadow: 0 1px 0 #7f1d1d;
-}
-
-.game-btn-warn {
-  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
-  border-color: #b45309;
-  color: white;
-  box-shadow: 0 3px 0 #78350f, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-warn:active:not(:disabled) {
-  box-shadow: 0 1px 0 #78350f;
-}
-
-.game-btn-neutral {
-  background: linear-gradient(180deg, #5c3d2e 0%, #3d2a1e 100%);
-  border-color: #5c3d2e;
-  color: #c4a882;
-  box-shadow: 0 3px 0 #1a0f0a, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-neutral:active:not(:disabled) {
-  box-shadow: 0 1px 0 #1a0f0a;
-}
-.game-btn-neutral:hover:not(:disabled) {
-  color: #f5e6d3;
-  background: linear-gradient(180deg, #6d4e3e 0%, #4d3a2e 100%);
-}
-
-.game-btn-gold {
-  background: linear-gradient(180deg, #d4a44a 0%, #b8860b 100%);
-  border-color: #8b6914;
-  color: #1a0f0a;
-  box-shadow: 0 3px 0 #5c3d0a, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-gold:active:not(:disabled) {
-  box-shadow: 0 1px 0 #5c3d0a;
-}
-.game-btn-gold:hover:not(:disabled) {
-  background: linear-gradient(180deg, #f0d68a 0%, #d4a44a 100%);
-}
-
-.game-btn-purple {
-  background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
-  border-color: #5b21b6;
-  color: white;
-  box-shadow: 0 3px 0 #3b0764, 0 4px 8px rgba(0,0,0,0.3);
-}
-.game-btn-purple:active:not(:disabled) {
-  box-shadow: 0 1px 0 #3b0764;
-}
-
-/* ゾーンラベル */
-.zone-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #c4a882;
-  letter-spacing: 0.5px;
-  padding: 2px 8px;
-  background: rgba(45, 27, 18, 0.7);
-  border: 1px solid rgba(92, 61, 46, 0.6);
-  border-radius: 6px;
-  display: inline-block;
-  margin-bottom: 6px;
-}
-
-/* ハウスゾーン */
-.house-zone {
-  background: rgba(13, 8, 6, 0.5);
-  border: 1px dashed rgba(212, 164, 74, 0.25);
-  border-radius: 10px;
-  padding: 8px;
-  min-height: 5.5rem;
-}
-
-/* ターンバナー */
-.turn-banner {
-  text-align: center;
-  font-weight: 900;
-  font-size: 15px;
-  letter-spacing: 1px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: 2px solid;
-}
-.turn-banner-mine {
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.25) 0%, rgba(22, 163, 74, 0.15) 100%);
-  border-color: #16a34a;
-  color: #4ade80;
-  animation: pulse 2s ease-in-out infinite;
-}
-.turn-banner-opponent {
-  background: rgba(45, 27, 18, 0.6);
-  border-color: #5c3d2e;
-  color: #c4a882;
-}
-.turn-banner-pk {
-  background: linear-gradient(90deg, rgba(124, 58, 237, 0.25) 0%, rgba(124, 58, 237, 0.15) 100%);
-  border-color: #7c3aed;
-  color: #c084fc;
-}
-
-/* タイトルロゴ風 */
-.game-title {
-  font-weight: 900;
-  font-size: 28px;
-  background: linear-gradient(180deg, #f0d68a 0%, #d4a44a 60%, #8b6914 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-  letter-spacing: 2px;
-}
-
-/* カードグロー */
 @keyframes card-glow {
-  0%, 100% { box-shadow: 0 0 8px 2px rgba(74, 222, 128, 0.4); }
-  50% { box-shadow: 0 0 16px 4px rgba(74, 222, 128, 0.7); }
+  0%, 100% { box-shadow: 0 0 6px 2px rgba(120, 220, 120, 0.35); }
+  50% { box-shadow: 0 0 14px 4px rgba(120, 220, 120, 0.6); }
 }
 .card-glow {
   animation: card-glow 1.5s ease-in-out infinite;
 }
 
-/* モーダルオーバーレイ */
+/* ===== ゲームボタン（フラット・丸み） ===== */
+.game-btn {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 700;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.5px;
+}
+.game-btn:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+.game-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.game-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.game-btn-primary { background: #4caf50; color: #fff; }
+.game-btn-danger { background: #c0392b; color: #fff; }
+.game-btn-warn { background: #e67e22; color: #fff; }
+.game-btn-gold { background: #c49a3c; color: #1a1210; }
+.game-btn-purple { background: #7c5cbf; color: #fff; }
+.game-btn-neutral { background: #3a2e28; color: #bba88e; }
+.game-btn-neutral:hover:not(:disabled) { color: #e8ddd0; }
+
+/* ===== ゾーン ===== */
+.zone-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9a8776;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.house-zone {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed rgba(154, 135, 118, 0.3);
+  border-radius: 12px;
+  padding: 8px;
+  min-height: 5.5rem;
+}
+
+/* ===== ターンバナー ===== */
+.turn-banner {
+  text-align: center;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+.turn-banner-mine {
+  background: rgba(76, 175, 80, 0.15);
+  color: #6fcf73;
+  animation: pulse 2s ease-in-out infinite;
+}
+.turn-banner-opponent {
+  background: rgba(0, 0, 0, 0.2);
+  color: #9a8776;
+}
+.turn-banner-pk {
+  background: rgba(124, 92, 191, 0.15);
+  color: #b39ddb;
+}
+
+/* ===== タイトル ===== */
+.game-title {
+  font-weight: 800;
+  font-size: 28px;
+  color: #c49a3c;
+  letter-spacing: 2px;
+}
+
+/* ===== モーダル ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -290,56 +142,31 @@ body {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #2d1b12 0%, #1a0f0a 100%);
-  border: 2px solid #8b6914;
+  background: #231c17;
+  border: 1px solid #3a2e28;
   border-radius: 16px;
   padding: 20px;
   max-width: 28rem;
   width: 100%;
   max-height: 85vh;
   overflow-y: auto;
-  box-shadow:
-    0 0 0 1px rgba(212, 164, 74, 0.3),
-    inset 0 1px 0 rgba(240, 214, 138, 0.1),
-    0 16px 48px rgba(0, 0, 0, 0.6);
 }
 
-/* じゃんけんボタン */
-.janken-btn {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #3d2a1e 0%, #2d1b12 100%);
-  border: 3px solid #5c3d2e;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: 0 4px 0 #1a0f0a, 0 6px 12px rgba(0,0,0,0.4);
-}
-.janken-btn:hover {
-  border-color: #d4a44a;
-  background: linear-gradient(180deg, #4d3a2e 0%, #3d2a1e 100%);
-  transform: translateY(-2px);
-}
-.janken-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 #1a0f0a;
+/* ===== パネル ===== */
+.game-panel {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #3a2e28;
+  border-radius: 12px;
 }
 
-/* スクロールバーのスタイル */
-::-webkit-scrollbar {
-  width: 6px;
+.game-panel-gold {
+  background: rgba(196, 154, 60, 0.08);
+  border: 1px solid rgba(196, 154, 60, 0.3);
+  border-radius: 12px;
 }
-::-webkit-scrollbar-track {
-  background: rgba(13, 8, 6, 0.5);
-}
-::-webkit-scrollbar-thumb {
-  background: #5c3d2e;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #8b6914;
-}
+
+/* ===== スクロールバー ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3a2e28; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #5a4a3a; }

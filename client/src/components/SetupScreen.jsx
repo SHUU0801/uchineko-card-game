@@ -35,13 +35,13 @@ export function SetupScreen() {
       <div className="flex justify-end">
         <YakuListButton />
       </div>
-      <h2 className="text-lg font-black" style={{ color: '#f0d68a' }}>場札にする4枚を選んでください</h2>
-      <p className="text-xs" style={{ color: '#8b7355' }}>
-        8枚引きました。このうち4枚を表向きの「場札」にします。残りの4枚は非公開の「手札」になります。（{chosenCount} / 4 選択中）
+      <h2 className="text-lg font-bold text-[#c49a3c]">場札にする4枚をえらんでね</h2>
+      <p className="text-xs text-[#7a6a5a]">
+        8枚ひいたよ。4枚を場札にして、のこりは手札になるよ（{chosenCount} / 4）
       </p>
 
       <div className="flex justify-center">
-        <DeckPile id="deck-pile-setup" count={view.me.deckCount} label="自分の山札（残り）" />
+        <DeckPile id="deck-pile-setup" count={view.me.deckCount} label="やまふだ" />
       </div>
 
       <div className="flex gap-2 flex-wrap justify-center">
@@ -56,22 +56,14 @@ export function SetupScreen() {
         ))}
       </div>
 
-      <button
-        onClick={confirm}
-        disabled={!canConfirm}
-        className="game-btn game-btn-primary"
-      >
-        {iAmReady ? '選択済み' : 'この4枚に決定する'}
+      <button onClick={confirm} disabled={!canConfirm} className="game-btn game-btn-primary">
+        {iAmReady ? 'えらびずみ' : 'けってい！'}
       </button>
 
-      <p className="text-xs font-bold" style={{ color: '#8b7355' }}>
+      <p className="text-xs font-bold text-[#7a6a5a]">
         {iAmReady
-          ? opponentReady
-            ? 'まもなく開始します…'
-            : '相手の選択を待っています…'
-          : opponentReady
-            ? '相手は選択済みです。あなたの選択をお待ちしています。'
-            : ''}
+          ? opponentReady ? 'まもなくスタート…' : 'あいてをまっているよ…'
+          : opponentReady ? 'あいてはえらびずみ。きみのばんだよ！' : ''}
       </p>
     </div>
   );

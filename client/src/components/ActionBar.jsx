@@ -28,35 +28,15 @@ export function ActionBar() {
     possibleYaku.some((p) => p.handCardId === selection.handCardId && sameSet(p.fieldCardIds, selection.fieldCardIds));
 
   const canAttemptYaku = isMyTurn && matchesAHint;
-
-  const canDassou =
-    isMyTurn &&
-    selection.handCardId &&
-    selection.fieldCardIds.length === 4 &&
-    selectedCards.some((c) => c.type === 'dassou');
-
-  const canKimagure =
-    isMyTurn &&
-    selection.handCardId &&
-    selection.fieldCardIds.length === 1 &&
-    selectedCards.some((c) => c.type === 'kimagure');
+  const canDassou = isMyTurn && selection.handCardId && selection.fieldCardIds.length === 4 && selectedCards.some((c) => c.type === 'dassou');
+  const canKimagure = isMyTurn && selection.handCardId && selection.fieldCardIds.length === 1 && selectedCards.some((c) => c.type === 'kimagure');
 
   const attemptYaku = () => {
-    socket.emit('attempt_yaku', {
-      handCardId: selection.handCardId,
-      fieldCardIds: selection.fieldCardIds,
-    });
+    socket.emit('attempt_yaku', { handCardId: selection.handCardId, fieldCardIds: selection.fieldCardIds });
   };
-
   const activateDassou = () => {
-    socket.emit('activate_dassou', {
-      handCardId: selection.handCardId,
-      fieldCardIds: selection.fieldCardIds,
-    });
+    socket.emit('activate_dassou', { handCardId: selection.handCardId, fieldCardIds: selection.fieldCardIds });
   };
-
-  const openKimagurePicker = () => setPendingKimagureTarget(true);
-
   const pass = () => {
     socket.emit('pass_turn', {});
     clearSelection();
@@ -64,27 +44,20 @@ export function ActionBar() {
 
   return (
     <div className="game-panel p-3 flex flex-wrap items-center gap-2">
-      <span className="text-xs font-bold mr-1" style={{ color: '#8b7355' }}>
-        {isMyTurn ? 'あなたの番です' : '相手の番です'}
-      </span>
-      <button onClick={attemptYaku} disabled={!canAttemptYaku} className="game-btn game-btn-primary text-xs">
-        役を成立させる
+      <button onClick={attemptYaku} disabled={!canAttemptYaku} className="game-btn game-btn-primary text-sm py-2 px-4">
+        やくをつくる
       </button>
-      <button onClick={activateDassou} disabled={!canDassou} className="game-btn game-btn-danger text-xs">
-        だっそう発動
+      <button onClick={activateDassou} disabled={!canDassou} className="game-btn game-btn-danger text-sm py-2 px-4">
+        だっそう
       </button>
-      <button onClick={openKimagurePicker} disabled={!canKimagure} className="game-btn game-btn-warn text-xs">
-        きまぐれ発動
+      <button onClick={() => setPendingKimagureTarget(true)} disabled={!canKimagure} className="game-btn game-btn-warn text-sm py-2 px-4">
+        きまぐれ
       </button>
-      <button onClick={pass} disabled={!isMyTurn} className="game-btn game-btn-neutral text-xs">
+      <button onClick={pass} disabled={!isMyTurn} className="game-btn game-btn-neutral text-sm py-2 px-4">
         パス
       </button>
-      <button
-        onClick={clearSelection}
-        className="text-xs font-bold px-3 py-2 rounded-lg cursor-pointer"
-        style={{ color: '#8b7355', border: '1px solid #5c3d2e', background: 'transparent' }}
-      >
-        選択クリア
+      <button onClick={clearSelection} className="text-xs font-bold text-[#7a6a5a] px-3 py-2 cursor-pointer hover:text-[#9a8776]">
+        クリア
       </button>
     </div>
   );

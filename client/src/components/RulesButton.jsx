@@ -3,8 +3,8 @@ import { useState } from 'react';
 function Section({ title, children }) {
   return (
     <div className="mb-4">
-      <h4 className="text-xs font-black mb-1" style={{ color: '#d4a44a' }}>{title}</h4>
-      <div className="text-sm leading-relaxed space-y-1" style={{ color: '#c4a882' }}>{children}</div>
+      <h4 className="text-xs font-bold text-[#c49a3c] mb-1">{title}</h4>
+      <div className="text-sm leading-relaxed space-y-1 text-[#9a8776]">{children}</div>
     </div>
   );
 }
@@ -15,61 +15,54 @@ export function RulesButton() {
   return (
     <>
       <button onClick={() => setOpen(true)} className="game-btn game-btn-neutral">
-        遊び方
+        あそびかた
       </button>
 
       {open && (
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-black" style={{ color: '#f0d68a' }}>遊び方</h3>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-xs font-bold cursor-pointer"
-                style={{ color: '#8b7355', textDecoration: 'underline' }}
-              >
-                閉じる
+              <h3 className="text-sm font-bold text-[#c49a3c]">あそびかた</h3>
+              <button onClick={() => setOpen(false)} className="text-xs font-bold text-[#7a6a5a] underline cursor-pointer">
+                とじる
               </button>
             </div>
 
-            <Section title="目的">
-              <p>
-                手持ちのカードで「役」を作り、役に使ったねこカードを自分の「ハウス」に集めます。
-                8手番（自分4回・相手4回）が終わった時点でハウスのねこが多い方の勝ちです。
-              </p>
+            <Section title="もくてき">
+              <p>カードで「やく」をつくって、ねこをハウスにあつめよう。8ターンおわったとき、ハウスのねこがおおい方のかち！</p>
             </Section>
 
             <Section title="4つのエリア">
-              <p>🐾 山札：伏せられた自分専用のドロー山（32枚）</p>
-              <p>🀄 場札：表向きで公開されている4枚。役作りの材料</p>
-              <p>🤲 手札：非公開の4〜5枚</p>
-              <p>🏠 ハウス：役が成立したカードを置く得点エリア</p>
+              <p>🐾 やまふだ：じぶん用のカードのやま（32枚）</p>
+              <p>🀄 ばふだ：おもてむきの4枚。やくのざいりょう</p>
+              <p>🤲 てふだ：じぶんだけみえる4〜5枚</p>
+              <p>🏠 ハウス：やくがせいりつしたカードをおくとくてんエリア</p>
             </Section>
 
-            <Section title="準備">
-              <p>①各自32枚デッキをシャッフルし8枚引く → ②4枚を場札として公開 → ③さいしょはにゃんじゃんけんで勝った方が先攻/後攻を選ぶ</p>
+            <Section title="じゅんび">
+              <p>①32枚シャッフルして8枚ひく → ②4枚をばふだにする → ③じゃんけんでせんこう・こうこうをきめる</p>
             </Section>
 
-            <Section title="ターンの流れ">
-              <p>①山札から1枚引く（手札が一時的に5枚に）</p>
-              <p>②手札1枚＋場札で役ができるか試す</p>
-              <p>・役が成立 → 使ったカードをハウスへ。場札を4枚に補充</p>
-              <p>・成立しない → パス（引いたカードは手札に残る。場札は補充しない）</p>
-              <p>③手番を相手に渡す</p>
+            <Section title="ターンのながれ">
+              <p>①やまふだから1枚ひく</p>
+              <p>②てふだ1枚＋ばふだでやくをつくる</p>
+              <p>・せいりつ → つかったカードをハウスへ。ばふだを4枚にほじゅう</p>
+              <p>・できない → パス</p>
+              <p>③あいてにこうたい</p>
             </Section>
 
-            <Section title="役の種類（詳細は「役一覧」ボタン）">
-              <p>あるある役（2枚）／きゅんきゅん役（3枚、大集会のみ5枚）／ペア役（同じ属性2枚）</p>
-              <p>⭐ オールマイティは任意の属性として使える万能カードです</p>
+            <Section title="やくのしゅるい">
+              <p>あるあるやく（2枚）／きゅんきゅんやく（3枚、大集会のみ5枚）／ペアやく（おなじぞくせい2枚）</p>
+              <p>⭐ オールマイティはどのぞくせいにもなれるよ</p>
             </Section>
 
-            <Section title="特殊カード">
-              <p>💨 だっそう：手札1＋場4の計5枚を使って発動。相手のハウスを空にして相手の山札へ戻す</p>
-              <p>🎲 きまぐれ：手札1＋場1の計2枚を使って発動。相手の場札を1枚指定して山札に戻させる（自分のターンのみ使用可）</p>
+            <Section title="とくしゅカード">
+              <p>💨 だっそう：5枚つかって、あいてのハウスをからにする</p>
+              <p>🎲 きまぐれ：2枚つかって、あいてのばふだを1枚もどす</p>
             </Section>
 
-            <Section title="決着">
-              <p>8手番終了時に同数の場合はサドンデス（PK）。両者同時に1枚引き、役ができた分だけハウスに追加（累積）。差がつくまで繰り返します。</p>
+            <Section title="けっちゃく">
+              <p>8ターンでどうてんならサドンデス。さがつくまでくりかえすよ</p>
             </Section>
           </div>
         </div>

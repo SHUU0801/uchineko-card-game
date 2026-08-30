@@ -15,53 +15,35 @@ export function HomeScreen() {
   };
 
   return (
-    <div className="max-w-sm mx-auto p-6 flex flex-col gap-5 text-center pt-12">
-      <div className="mb-2">
-        <div className="text-5xl mb-2" style={{ filter: 'drop-shadow(0 2px 8px rgba(212,164,74,0.3))' }}>🐱</div>
-        <h1 className="game-title">うちねこカードゲーム</h1>
-        <p className="text-xs mt-2" style={{ color: '#8b7355' }}>
-          {connected ? 'サーバーに接続済み' : 'サーバーに接続中…'}
+    <div className="max-w-xs mx-auto p-6 flex flex-col gap-4 text-center pt-16">
+      <div className="mb-4">
+        <div className="text-5xl mb-3">🐱</div>
+        <h1 className="game-title text-2xl">うちねこカードゲーム</h1>
+        <p className="text-[11px] mt-2" style={{ color: '#7a6a5a' }}>
+          {connected ? '接続OK' : '接続中…'}
         </p>
       </div>
 
       <RulesButton />
 
-      <button
-        onClick={createRoom}
-        disabled={!connected}
-        className="game-btn game-btn-primary"
-      >
-        ルームを作成する
+      <button onClick={createRoom} disabled={!connected} className="game-btn game-btn-primary">
+        ルームをつくる
       </button>
 
-      <button
-        onClick={createCpuRoom}
-        disabled={!connected}
-        className="game-btn game-btn-purple"
-      >
-        CPUと対戦する
+      <button onClick={createCpuRoom} disabled={!connected} className="game-btn game-btn-purple">
+        CPUとあそぶ
       </button>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-1">
         <input
           value={joinCode}
           onChange={(e) => setJoinCode(e.target.value)}
-          placeholder="ルームコードを入力"
+          placeholder="ルームコード"
           maxLength={6}
-          className="py-3 px-4 rounded-lg text-center tracking-widest uppercase font-bold"
-          style={{
-            background: 'rgba(13, 8, 6, 0.6)',
-            border: '2px solid #5c3d2e',
-            color: '#f0d68a',
-            fontSize: '18px',
-          }}
+          className="py-3 px-4 rounded-2xl text-center tracking-widest uppercase font-bold text-lg bg-[#231c17] border border-[#3a2e28] text-[#c49a3c] placeholder-[#5a4a3a]"
         />
-        <button
-          onClick={joinRoom}
-          disabled={!connected || !joinCode.trim()}
-          className="game-btn game-btn-gold"
-        >
-          ルームに参加する
+        <button onClick={joinRoom} disabled={!connected || !joinCode.trim()} className="game-btn game-btn-gold">
+          ルームに参加
         </button>
       </div>
     </div>

@@ -24,8 +24,8 @@ export function KimagurePicker() {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3 className="text-sm font-black mb-4" style={{ color: '#f0d68a' }}>
-          きまぐれ：相手の場札を1枚選んで戻させます
+        <h3 className="text-sm font-bold text-[#c49a3c] mb-4">
+          きまぐれ：あいてのばふだを1枚えらんでね
         </h3>
         <div className="flex gap-2 flex-wrap justify-center">
           {view.opponent.field.map((card) => (
@@ -33,11 +33,10 @@ export function KimagurePicker() {
           ))}
         </div>
         <button
-          className="mt-4 text-xs font-bold cursor-pointer"
-          style={{ color: '#8b7355', textDecoration: 'underline' }}
+          className="mt-4 text-xs font-bold text-[#7a6a5a] underline cursor-pointer"
           onClick={() => setPendingKimagureTarget(false)}
         >
-          キャンセル
+          やめる
         </button>
       </div>
     </div>

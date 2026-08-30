@@ -1,16 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { cardLabel, colorToBgClass, cardEmoji } from '../data/masterData';
 
-const COLOR_TO_GRADIENT = {
-  red: 'from-red-700 to-red-900',
-  blue: 'from-blue-600 to-blue-900',
-  green: 'from-green-600 to-green-900',
-  purple: 'from-purple-600 to-purple-900',
-  orange: 'from-orange-600 to-orange-900',
-  navy: 'from-blue-800 to-blue-950',
-  lightblue: 'from-sky-400 to-sky-700',
-};
-
 export function Card({ card, faceDown = false, selected = false, disabled = false, onClick, small = false, glow = false, flyFromId = null }) {
   const ref = useRef(null);
 
@@ -32,48 +22,28 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const sizeClass = small ? 'w-14 h-20 text-[10px]' : 'w-20 h-28 text-xs';
+  const emojiSize = small ? 'text-lg' : 'text-2xl';
+
   if (faceDown || !card) {
-    const sz = small ? 'w-14 h-20' : 'w-20 h-28';
     return (
-      <div
-        className={`${sz} rounded-lg flex items-center justify-center select-none`}
-        style={{
-          background: 'linear-gradient(135deg, #3d2a1e 0%, #2d1b12 100%)',
-          border: '2px solid #5c3d2e',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,164,74,0.1)',
-        }}
-      >
-        <span className="text-lg opacity-40">🐾</span>
+      <div className={`${sizeClass} rounded-lg bg-[#2a211a] border border-[#4a3a2e] flex items-center justify-center select-none`}>
+        <span className="text-lg opacity-30">🐾</span>
       </div>
     );
   }
 
   const isSpecial = card.type === 'dassou' || card.type === 'kimagure';
   const isAllmighty = card.type === 'allmighty';
-  const gradientClass = isSpecial ? '' : isAllmighty ? '' : (COLOR_TO_GRADIENT[card.color] || '');
 
-  let innerBg;
-  if (isSpecial) {
-    innerBg = 'linear-gradient(135deg, #3d2a1e 0%, #2d1b12 100%)';
-  } else if (isAllmighty) {
-    innerBg = 'linear-gradient(135deg, #d4a44a 0%, #8b6914 50%, #d4a44a 100%)';
-  } else {
-    innerBg = undefined;
-  }
+  let bgClass = '';
+  if (isSpecial) bgClass = 'bg-[#2a211a]';
+  else if (isAllmighty) bgClass = 'bg-[#c49a3c]';
+  else bgClass = colorToBgClass(card.color);
 
-  const sizeOuter = small ? 'w-14 h-20' : 'w-20 h-28';
-  const emojiSize = small ? 'text-lg' : 'text-2xl';
-  const labelSize = small ? 'text-[8px]' : 'text-[10px]';
-
-  let borderColor = 'rgba(92, 61, 46, 0.8)';
-  let ringStyle = {};
-  if (selected) {
-    borderColor = '#f0d68a';
-    ringStyle = { boxShadow: '0 0 0 3px rgba(240, 214, 138, 0.5), 0 4px 12px rgba(0,0,0,0.4)' };
-  } else if (glow) {
-    borderColor = '#4ade80';
-    ringStyle = {};
-  }
+  let borderClass = 'border-[#4a3a2e]';
+  if (selected) borderClass = 'border-[#f5d76e]';
+  else if (glow) borderClass = 'border-[#6fcf73]';
 
   return (
     <button
@@ -82,24 +52,19 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
       onClick={onClick}
       disabled={disabled || !onClick}
       className={[
-        sizeOuter,
+        sizeClass,
         flyFromId ? '' : 'animate-card-pop',
-        'rounded-lg flex flex-col items-center justify-center gap-0.5 font-bold text-white transition-all',
-        gradientClass ? `bg-gradient-to-b ${gradientClass}` : '',
-        selected ? '-translate-y-2' : '',
+        'rounded-lg border-2 flex flex-col items-center justify-center gap-0.5 font-bold text-white transition-all',
+        bgClass,
+        borderClass,
+        selected ? '-translate-y-2 shadow-[0_0_0_2px_rgba(245,215,110,0.4)]' : '',
         glow && !selected ? 'card-glow' : '',
-        onClick && !disabled ? 'cursor-pointer hover:-translate-y-1 hover:brightness-110' : 'cursor-default',
+        onClick && !disabled ? 'cursor-pointer hover:-translate-y-1' : 'cursor-default',
         disabled ? 'opacity-40' : '',
       ].filter(Boolean).join(' ')}
-      style={{
-        border: `2px solid ${borderColor}`,
-        ...(innerBg ? { background: innerBg } : {}),
-        boxShadow: `${ringStyle.boxShadow || ''}, inset 0 1px 0 rgba(255,255,255,0.15), 0 3px 8px rgba(0,0,0,0.5)`.replace(/^, /, ''),
-        textShadow: '0 1px 3px rgba(0,0,0,0.6)',
-      }}
     >
-      <span className={emojiSize} style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.4))' }}>{cardEmoji(card)}</span>
-      <span className={`${labelSize} text-center leading-tight px-1 font-bold`} style={{ color: isAllmighty ? '#1a0f0a' : '#f5e6d3' }}>
+      <span className={emojiSize}>{cardEmoji(card)}</span>
+      <span className={`text-center leading-tight px-1 font-bold ${isAllmighty ? 'text-[#1a1210]' : ''}`}>
         {cardLabel(card)}
       </span>
     </button>

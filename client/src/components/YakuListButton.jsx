@@ -5,11 +5,7 @@ function AttributeChips({ ids }) {
   return (
     <span className="inline-flex gap-1 flex-wrap">
       {ids.map((id, i) => (
-        <span
-          key={i}
-          className="rounded px-1.5 py-0.5 text-[11px] font-bold"
-          style={{ background: 'rgba(92, 61, 46, 0.6)', color: '#c4a882', border: '1px solid rgba(92,61,46,0.8)' }}
-        >
+        <span key={i} className="rounded-full px-2 py-0.5 text-[11px] font-bold bg-[#2a211a] text-[#9a8776]">
           {attributeName(id)}
         </span>
       ))}
@@ -20,17 +16,15 @@ function AttributeChips({ ids }) {
 function YakuRow({ yaku }) {
   if (yaku.matchType === 'distinctColorSet') {
     return (
-      <div className="flex justify-between items-center gap-2 py-2" style={{ borderBottom: '1px solid rgba(92,61,46,0.4)' }}>
-        <span className="font-black text-sm" style={{ color: '#f0d68a' }}>{yaku.name}</span>
-        <span className="text-xs text-right" style={{ color: '#8b7355' }}>
-          異なる5色を1枚ずつ（{yaku.cardCount}枚）
-        </span>
+      <div className="flex justify-between items-center gap-2 py-2 border-b border-[#2a211a]">
+        <span className="font-bold text-sm text-[#c49a3c]">{yaku.name}</span>
+        <span className="text-xs text-[#7a6a5a] text-right">5色×1枚（{yaku.cardCount}枚）</span>
       </div>
     );
   }
   return (
-    <div className="flex justify-between items-center gap-2 py-2" style={{ borderBottom: '1px solid rgba(92,61,46,0.4)' }}>
-      <span className="font-black text-sm" style={{ color: '#f0d68a' }}>{yaku.name}</span>
+    <div className="flex justify-between items-center gap-2 py-2 border-b border-[#2a211a]">
+      <span className="font-bold text-sm text-[#c49a3c]">{yaku.name}</span>
       <AttributeChips ids={yaku.requiredAttributes} />
     </div>
   );
@@ -45,53 +39,35 @@ export function YakuListButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="px-3 py-1.5 rounded-lg text-xs font-black cursor-pointer"
-        style={{
-          background: 'linear-gradient(180deg, #3d2a1e 0%, #2d1b12 100%)',
-          border: '2px solid #5c3d2e',
-          color: '#c4a882',
-          boxShadow: '0 2px 0 #1a0f0a',
-        }}
+        className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#2a211a] text-[#9a8776] cursor-pointer hover:text-[#c49a3c]"
       >
-        役一覧
+        やく一覧
       </button>
 
       {open && (
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-black" style={{ color: '#f0d68a' }}>役一覧</h3>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-xs font-bold cursor-pointer"
-                style={{ color: '#8b7355', textDecoration: 'underline' }}
-              >
-                閉じる
+              <h3 className="text-sm font-bold text-[#c49a3c]">やく一覧</h3>
+              <button onClick={() => setOpen(false)} className="text-xs font-bold text-[#7a6a5a] underline cursor-pointer">
+                とじる
               </button>
             </div>
 
-            <h4 className="text-xs font-black mt-2 mb-1" style={{ color: '#d4a44a' }}>
-              あるある役（手札1＋場札1・計2枚）
-            </h4>
-            {arualu.map((y) => (
-              <YakuRow key={y.id} yaku={y} />
-            ))}
+            <h4 className="text-xs font-bold text-[#c49a3c] mt-2 mb-1">あるあるやく（2枚）</h4>
+            {arualu.map((y) => <YakuRow key={y.id} yaku={y} />)}
 
-            <h4 className="text-xs font-black mt-5 mb-1" style={{ color: '#d4a44a' }}>
-              きゅんきゅん役（手札1＋場札2・計3枚。大集会のみ手札1＋場札4・計5枚）
-            </h4>
-            {kyunkyun.map((y) => (
-              <YakuRow key={y.id} yaku={y} />
-            ))}
+            <h4 className="text-xs font-bold text-[#c49a3c] mt-5 mb-1">きゅんきゅんやく（3枚 / 大集会5枚）</h4>
+            {kyunkyun.map((y) => <YakuRow key={y.id} yaku={y} />)}
 
-            <h4 className="text-xs font-black mt-5 mb-1" style={{ color: '#d4a44a' }}>ペア役（手札1＋場札1・計2枚）</h4>
-            <p className="text-xs leading-relaxed" style={{ color: '#c4a882' }}>
-              上の一覧に無い組み合わせでも、同じ属性のねこカードを2枚（手札1＋場札1）使うと「◯◯ペア」として成立します。
+            <h4 className="text-xs font-bold text-[#c49a3c] mt-5 mb-1">ペアやく（2枚）</h4>
+            <p className="text-xs text-[#9a8776] leading-relaxed">
+              おなじぞくせいのねこ2枚で「◯◯ペア」になるよ
             </p>
 
-            <h4 className="text-xs font-black mt-5 mb-1" style={{ color: '#d4a44a' }}>オールマイティ</h4>
-            <p className="text-xs leading-relaxed" style={{ color: '#c4a882' }}>
-              どの役でも、任意の属性のカードとして使えます（使用枚数の制限なし）。大集会だけは属性ではなく、そのカード自身の色として数えます。
+            <h4 className="text-xs font-bold text-[#c49a3c] mt-5 mb-1">オールマイティ</h4>
+            <p className="text-xs text-[#9a8776] leading-relaxed">
+              どのぞくせいにもなれるまんのうカード。大集会ではカードじたいの色でかぞえるよ
             </p>
           </div>
         </div>

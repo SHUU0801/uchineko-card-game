@@ -30,7 +30,7 @@ export function Board() {
   const isMyPkTurn = view ? view.phase === 'pk' && view.pk && !view.pk.myActed : false;
 
   if (!view) {
-    return <div className="p-6 text-center" style={{ color: '#8b7355' }}>対戦相手を待っています…</div>;
+    return <div className="p-6 text-center text-[#7a6a5a]">あいてをまっているよ…</div>;
   }
 
   const selectHandCard = (cardId) => setHandCard(selection.handCardId === cardId ? null : cardId);
@@ -59,85 +59,68 @@ export function Board() {
       : [];
 
   let turnBannerClass = 'turn-banner turn-banner-opponent';
-  let turnBannerText = '相手の番です';
+  let turnBannerText = 'あいてのばん';
   if (view.phase === 'pk') {
     turnBannerClass = 'turn-banner turn-banner-pk';
-    turnBannerText = isMyPkTurn ? 'サドンデス：あなたの番です' : 'サドンデス：相手の入力を待っています';
+    turnBannerText = isMyPkTurn ? 'サドンデス：きみのばん' : 'サドンデス：あいてのばん';
   } else if (isMyTurn) {
     turnBannerClass = 'turn-banner turn-banner-mine';
-    turnBannerText = 'あなたの番です';
+    turnBannerText = 'きみのばんだよ！';
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-4 flex flex-col gap-4">
+    <div className="max-w-3xl mx-auto p-4 flex flex-col gap-3">
       <div className={turnBannerClass}>{turnBannerText}</div>
 
-      <div className="flex justify-between items-center text-xs" style={{ color: '#8b7355' }}>
-        <span className="font-bold">Room: {roomCode}</span>
+      <div className="flex justify-between items-center text-[11px] text-[#7a6a5a]">
+        <span>{roomCode}</span>
         <span>
-          手番: {view.turnCountPerPlayer[view.myIndex]} / 4（自分） ・{' '}
-          {view.turnCountPerPlayer[view.myIndex === 0 ? 1 : 0]} / 4（相手）
+          {view.turnCountPerPlayer[view.myIndex]}/4 ・ {view.turnCountPerPlayer[view.myIndex === 0 ? 1 : 0]}/4
         </span>
         <YakuListButton />
       </div>
 
       {opponentLeft && (
-        <div className="game-panel p-3 text-sm text-center font-bold" style={{ borderColor: '#dc2626', color: '#ef4444' }}>
-          相手が退出しました
+        <div className="game-panel p-3 text-sm text-center font-bold text-[#c0392b]">
+          あいてがぬけちゃった
         </div>
       )}
 
       {errorMessage && (
-        <div
-          className="game-panel p-3 text-sm text-center cursor-pointer font-bold"
-          style={{ borderColor: '#dc2626', color: '#ef4444' }}
-          onClick={clearError}
-        >
-          {errorMessage}（クリックで閉じる）
+        <div className="game-panel p-3 text-sm text-center cursor-pointer font-bold text-[#c0392b]" onClick={clearError}>
+          {errorMessage}
         </div>
       )}
 
       {lastActionResult && lastActionResult.kind !== 'pass' && (
-        <div
-          key={lastActionSeq}
-          className="animate-yaku-flash game-panel-gold p-3 text-sm text-center font-black"
-          style={{ color: '#f0d68a' }}
-        >
-          {lastActionResult.kind === 'yaku' && `🎉 役成立: ${lastActionResult.yakuName}`}
-          {lastActionResult.kind === 'pair' && `🎉 ペア役成立: ${lastActionResult.yakuName || 'ペア'}`}
-          {lastActionResult.kind === 'dassou' && '💨 だっそう発動！相手のハウスをリセット'}
-          {lastActionResult.kind === 'kimagure' && '🎲 きまぐれ発動！相手の場札を1枚戻させた'}
+        <div key={lastActionSeq} className="animate-yaku-flash game-panel-gold p-3 text-sm text-center font-bold text-[#c49a3c]">
+          {lastActionResult.kind === 'yaku' && `🎉 ${lastActionResult.yakuName}！`}
+          {lastActionResult.kind === 'pair' && `🎉 ${lastActionResult.yakuName || 'ペア'}！`}
+          {lastActionResult.kind === 'dassou' && '💨 だっそう！あいてのハウスをリセット'}
+          {lastActionResult.kind === 'kimagure' && '🎲 きまぐれ！あいての場札を1枚もどした'}
         </div>
       )}
 
-      {/* 相手エリア */}
       <div className="space-y-2">
         <div className="flex items-start gap-3">
-          <DeckPile id="deck-pile-opponent" count={view.opponent.deckCount} label="相手の山札" />
+          <DeckPile id="deck-pile-opponent" count={view.opponent.deckCount} label="あいて" />
           <div className="flex-1 space-y-2">
             <OpponentHandBack count={view.opponent.handCount} />
-            <FieldZone
-              label="相手の場札"
-              cards={view.opponent.field}
-              newCardIds={opponentFieldNewIds}
-              flyFromId="deck-pile-opponent"
-            />
+            <FieldZone label="あいての場札" cards={view.opponent.field} newCardIds={opponentFieldNewIds} flyFromId="deck-pile-opponent" />
           </div>
         </div>
-        <HouseZone label="相手のハウス" cards={view.opponent.house} />
+        <HouseZone label="あいてのハウス" cards={view.opponent.house} />
       </div>
 
-      {/* 区切り線 */}
-      <div style={{ borderTop: '1px solid rgba(212, 164, 74, 0.15)' }} />
+      <div className="border-t border-[#2a211a]" />
 
-      {/* 自分エリア */}
       <div className="space-y-2">
-        <HouseZone label="自分のハウス" cards={view.me.house} />
+        <HouseZone label="じぶんのハウス" cards={view.me.house} />
         <div className="flex items-start gap-3">
-          <DeckPile id="deck-pile-me" count={view.me.deckCount} label="自分の山札" />
+          <DeckPile id="deck-pile-me" count={view.me.deckCount} label="じぶん" />
           <div className="flex-1 space-y-2">
             <FieldZone
-              label="自分の場札"
+              label="じぶんの場札"
               cards={view.me.field}
               selectable={isMyTurn || isMyPkTurn}
               selectedIds={selection.fieldCardIds}
