@@ -3,6 +3,9 @@ const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 紛らわしい�
 const ROOM_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6時間放置されたルームを掃除
 const CLEANUP_INTERVAL_MS = 30 * 60 * 1000;
 
+// CPU対戦ルームのプレイヤー1に割り当てる、実ソケットIDと衝突しないダミー値。
+const CPU_MARKER = 'CPU_BOT';
+
 const rooms = new Map();
 
 function generateRoomCode() {
@@ -19,9 +22,19 @@ function createRoom(socketId) {
     code,
     sockets: [socketId, null],
     state: null,
+    isCpuRoom: false,
+    rematchVotes: [false, false],
     createdAt: Date.now(),
   };
   rooms.set(code, room);
+  return room;
+}
+
+// CPU対戦：プレイヤー1をCPU_MARKERで埋め、参加待ちなしで即座に開始できるようにする。
+function createCpuRoom(socketId) {
+  const room = createRoom(socketId);
+  room.sockets[1] = CPU_MARKER;
+  room.isCpuRoom = true;
   return room;
 }
 
@@ -50,12 +63,17 @@ function getPlayerIndex(room, socketId) {
   return room.sockets.indexOf(socketId);
 }
 
+function isRealSocketSlot(value) {
+  return !!value && value !== CPU_MARKER;
+}
+
 function leaveRoom(socketId) {
   const room = getRoomBySocket(socketId);
   if (!room) return null;
   const idx = getPlayerIndex(room, socketId);
   if (idx !== -1) room.sockets[idx] = null;
-  if (!room.sockets[0] && !room.sockets[1]) {
+  // CPU対戦ルームは人間が抜けた時点で（CPU側だけ残っても意味が無いので）即座に破棄する
+  if (!isRealSocketSlot(room.sockets[0]) && !isRealSocketSlot(room.sockets[1])) {
     rooms.delete(room.code);
   }
   return room;
@@ -64,7 +82,7 @@ function leaveRoom(socketId) {
 function cleanupStaleRooms() {
   const now = Date.now();
   for (const [code, room] of rooms.entries()) {
-    const isEmpty = !room.sockets[0] && !room.sockets[1];
+    const isEmpty = !isRealSocketSlot(room.sockets[0]) && !isRealSocketSlot(room.sockets[1]);
     if (isEmpty && now - room.createdAt > ROOM_MAX_AGE_MS) {
       rooms.delete(code);
     }
@@ -74,7 +92,9 @@ function cleanupStaleRooms() {
 setInterval(cleanupStaleRooms, CLEANUP_INTERVAL_MS).unref();
 
 module.exports = {
+  CPU_MARKER,
   createRoom,
+  createCpuRoom,
   joinRoom,
   getRoomByCode,
   getRoomBySocket,

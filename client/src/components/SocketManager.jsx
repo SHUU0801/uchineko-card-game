@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useGameStore } from '../store/gameStore';
 import { translateErrorCode } from '../data/errorMessages';
+import { playDrawSound, playYakuSound, playPassSound, playErrorSound } from '../utils/sound';
 
 const socketURL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
 
@@ -15,14 +16,19 @@ export const SocketManager = () => {
         setConnected,
         setRoomCode,
         setMyIndex,
+        setVsCpu,
         setPhase,
         setView,
         setLastActionResult,
         setGameOverInfo,
+        clearGameOverInfo,
+        setRematchVotes,
         setError,
         setOpponentLeft,
         clearSelection,
     } = useGameStore();
+
+    const prevHandLengthRef = useRef(null);
 
     useEffect(() => {
         socket.connect();
@@ -30,10 +36,11 @@ export const SocketManager = () => {
         const onConnect = () => setConnected(true);
         const onDisconnect = () => setConnected(false);
 
-        const onRoomCreated = ({ roomCode }) => {
+        const onRoomCreated = ({ roomCode, vsCpu }) => {
             setRoomCode(roomCode);
             setMyIndex(0);
-            setPhase('lobby');
+            setVsCpu(!!vsCpu);
+            if (!vsCpu) setPhase('lobby');
         };
 
         const onRoomJoined = ({ roomCode, myIndex }) => {
@@ -51,19 +58,33 @@ export const SocketManager = () => {
         };
 
         const onStateUpdate = (view) => {
+            // 自分の手札が増えていたら（ターン開始時のドロー）効果音を鳴らす
+            const prevLen = prevHandLengthRef.current;
+            if (view.phase === 'playing' && prevLen !== null && view.me.hand.length > prevLen) {
+                playDrawSound();
+            }
+            prevHandLengthRef.current = view.me.hand.length;
+
             setView(view);
             if (view.phase !== 'finished') {
                 setPhase(view.phase);
+                clearGameOverInfo();
             }
             clearSelection();
         };
 
         const onActionResult = (result) => {
             setLastActionResult(result);
+            if (result.kind === 'pass') {
+                playPassSound();
+            } else {
+                playYakuSound();
+            }
         };
 
         const onErrorEvent = ({ code }) => {
             setError(translateErrorCode(code));
+            playErrorSound();
         };
 
         const onGameOver = (info) => {
@@ -72,6 +93,10 @@ export const SocketManager = () => {
 
         const onOpponentLeft = () => {
             setOpponentLeft(true);
+        };
+
+        const onRematchStatus = ({ votes }) => {
+            setRematchVotes(votes);
         };
 
         socket.on('connect', onConnect);
@@ -85,6 +110,7 @@ export const SocketManager = () => {
         socket.on('error', onErrorEvent);
         socket.on('game_over', onGameOver);
         socket.on('opponent_left', onOpponentLeft);
+        socket.on('rematch_status', onRematchStatus);
 
         return () => {
             socket.off('connect', onConnect);
@@ -98,6 +124,7 @@ export const SocketManager = () => {
             socket.off('error', onErrorEvent);
             socket.off('game_over', onGameOver);
             socket.off('opponent_left', onOpponentLeft);
+            socket.off('rematch_status', onRematchStatus);
             socket.disconnect();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

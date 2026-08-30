@@ -15,6 +15,7 @@ export function Board() {
   const setHandCard = useGameStore((s) => s.setHandCard);
   const toggleFieldCardSelection = useGameStore((s) => s.toggleFieldCardSelection);
   const lastActionResult = useGameStore((s) => s.lastActionResult);
+  const lastActionSeq = useGameStore((s) => s.lastActionSeq);
   const errorMessage = useGameStore((s) => s.errorMessage);
   const clearError = useGameStore((s) => s.clearError);
   const opponentLeft = useGameStore((s) => s.opponentLeft);
@@ -93,11 +94,11 @@ export function Board() {
       )}
 
       {lastActionResult && lastActionResult.kind !== 'pass' && (
-        <div className="bg-emerald-900/60 rounded-lg p-2 text-sm text-center">
-          {lastActionResult.kind === 'yaku' && `役成立: ${lastActionResult.yakuName}`}
-          {lastActionResult.kind === 'pair' && `ペア役成立: ${lastActionResult.yakuName || 'ペア'}`}
-          {lastActionResult.kind === 'dassou' && 'だっそう発動！相手のハウスをリセット'}
-          {lastActionResult.kind === 'kimagure' && 'きまぐれ発動！相手の場札を1枚戻させた'}
+        <div key={lastActionSeq} className="animate-yaku-flash bg-emerald-900/60 rounded-lg p-2 text-sm text-center font-bold">
+          {lastActionResult.kind === 'yaku' && `🎉 役成立: ${lastActionResult.yakuName}`}
+          {lastActionResult.kind === 'pair' && `🎉 ペア役成立: ${lastActionResult.yakuName || 'ペア'}`}
+          {lastActionResult.kind === 'dassou' && '💨 だっそう発動！相手のハウスをリセット'}
+          {lastActionResult.kind === 'kimagure' && '🎲 きまぐれ発動！相手の場札を1枚戻させた'}
         </div>
       )}
 

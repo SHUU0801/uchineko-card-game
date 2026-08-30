@@ -7,11 +7,14 @@ export const useGameStore = create((set) => ({
   phase: 'home', // 'home' | 'lobby' | 'setup' | 'janken' | 'janken_choice' | 'playing' | 'pk' | 'finished'
   roomCode: null,
   myIndex: null,
+  vsCpu: false,
   view: null, // 最後に受け取ったstate_update（自分視点。相手の非公開情報は含まれない）
   selection: { ...initialSelection },
   pendingKimagureTarget: false, // きまぐれの対象選択モードかどうか
   lastActionResult: null,
+  lastActionSeq: 0, // アクション結果バナーのアニメーションを毎回再生させるためのカウンタ
   gameOverInfo: null,
+  rematchVotes: null, // [自分が再戦を希望したか, 相手が希望したか] ではなくプレイヤーindex順
   errorMessage: null,
   opponentLeft: false,
 
@@ -19,6 +22,7 @@ export const useGameStore = create((set) => ({
   setPhase: (phase) => set({ phase }),
   setRoomCode: (roomCode) => set({ roomCode }),
   setMyIndex: (myIndex) => set({ myIndex }),
+  setVsCpu: (vsCpu) => set({ vsCpu }),
   setView: (view) => set({ view }),
 
   setHandCard: (handCardId) =>
@@ -37,8 +41,11 @@ export const useGameStore = create((set) => ({
 
   setPendingKimagureTarget: (flag) => set({ pendingKimagureTarget: flag }),
 
-  setLastActionResult: (result) => set({ lastActionResult: result }),
-  setGameOverInfo: (info) => set({ gameOverInfo: info, phase: 'finished' }),
+  setLastActionResult: (result) =>
+    set((state) => ({ lastActionResult: result, lastActionSeq: state.lastActionSeq + 1 })),
+  setGameOverInfo: (info) => set({ gameOverInfo: info, phase: 'finished', rematchVotes: null }),
+  clearGameOverInfo: () => set({ gameOverInfo: null, rematchVotes: null }),
+  setRematchVotes: (votes) => set({ rematchVotes: votes }),
   setError: (errorMessage) => set({ errorMessage }),
   clearError: () => set({ errorMessage: null }),
   setOpponentLeft: (opponentLeft) => set({ opponentLeft }),
@@ -48,11 +55,14 @@ export const useGameStore = create((set) => ({
       phase: 'home',
       roomCode: null,
       myIndex: null,
+      vsCpu: false,
       view: null,
       selection: { ...initialSelection },
       pendingKimagureTarget: false,
       lastActionResult: null,
+      lastActionSeq: 0,
       gameOverInfo: null,
+      rematchVotes: null,
       errorMessage: null,
       opponentLeft: false,
     }),

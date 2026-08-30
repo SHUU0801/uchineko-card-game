@@ -23,6 +23,7 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
       disabled={disabled || !onClick}
       className={[
         sizeClass,
+        'animate-card-pop',
         'rounded-lg border-2 flex flex-col items-center justify-center gap-0.5 font-bold text-white shadow transition-transform',
         bgClass,
         selected

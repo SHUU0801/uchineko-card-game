@@ -7,6 +7,7 @@ export function HomeScreen() {
   const connected = useGameStore((s) => s.connected);
 
   const createRoom = () => socket.emit('create_room');
+  const createCpuRoom = () => socket.emit('create_cpu_room');
   const joinRoom = () => {
     if (!joinCode.trim()) return;
     socket.emit('join_room', { roomCode: joinCode.trim().toUpperCase() });
@@ -23,6 +24,14 @@ export function HomeScreen() {
         className="py-3 rounded-xl bg-emerald-600 disabled:bg-slate-700 font-bold"
       >
         ルームを作成する
+      </button>
+
+      <button
+        onClick={createCpuRoom}
+        disabled={!connected}
+        className="py-3 rounded-xl bg-purple-600 disabled:bg-slate-700 font-bold"
+      >
+        🤖 CPUと対戦する
       </button>
 
       <div className="flex flex-col gap-2">

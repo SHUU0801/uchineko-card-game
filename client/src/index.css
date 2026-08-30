@@ -26,3 +26,38 @@ body {
   color: #f1f5f9;
   font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
 }
+
+/* カードが手札/場札に新しく現れた瞬間（ドロー等）のモーション。
+   Reactのkey(card.id)が変わって新規マウントされた時だけ再生される。 */
+@keyframes card-pop {
+  0% {
+    transform: scale(0.5) translateY(14px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+.animate-card-pop {
+  animation: card-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 役成立などのアクション結果バナー用の演出 */
+@keyframes yaku-flash {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-yaku-flash {
+  animation: yaku-flash 0.4s ease-out;
+}

@@ -4,13 +4,14 @@ const turnManager = require('./gameEngine/turnManager');
 const specialActions = require('./gameEngine/specialActions');
 const pkEngine = require('./gameEngine/pkEngine');
 const jankenEngine = require('./gameEngine/jankenEngine');
+const cpuController = require('./cpuController');
 const { buildPlayerView } = require('./gameEngine/viewBuilder');
 
 // 状態更新の送信経路を単一化：どのハンドラからもこの関数を通してのみ配信することで、
 // 非公開情報(相手の手札/山札の中身)のリーク漏れを構造的に防ぐ。
 function broadcastViews(io, room) {
   room.sockets.forEach((socketId, idx) => {
-    if (!socketId || !room.state) return;
+    if (!socketId || socketId === rooms.CPU_MARKER || !room.state) return;
     io.to(socketId).emit('state_update', buildPlayerView(room.state, idx));
   });
 }
@@ -29,6 +30,10 @@ function emitGameOverIfFinished(io, room) {
   const winnerIndex = turnManager.checkWinner(room.state);
   const finalScores = [turnManager.computeScore(room.state.players[0]), turnManager.computeScore(room.state.players[1])];
   io.to(room.code).emit('game_over', { winnerIndex, finalScores });
+}
+
+function runCpu(io, room) {
+  cpuController.scheduleCpuAction(io, room, broadcastViews, emitGameOverIfFinished);
 }
 
 function requireActiveRoom(socket) {
@@ -53,6 +58,16 @@ module.exports = function registerSocketHandlers(io) {
       const room = rooms.createRoom(socket.id);
       socket.join(room.code);
       socket.emit('room_created', { roomCode: room.code });
+    });
+
+    socket.on('create_cpu_room', () => {
+      const room = rooms.createCpuRoom(socket.id);
+      socket.join(room.code);
+      socket.emit('room_created', { roomCode: room.code, vsCpu: true });
+
+      room.state = turnManager.createGame(Math.random);
+      broadcastViews(io, room);
+      runCpu(io, room);
     });
 
     socket.on('join_room', ({ roomCode }) => {
@@ -87,6 +102,7 @@ module.exports = function registerSocketHandlers(io) {
       room.state = { ...room.state, players: result.players, setupComplete: result.setupComplete };
       room.state = turnManager.finalizeSetupIfReady(room.state);
       broadcastViews(io, room);
+      runCpu(io, room);
     });
 
     socket.on('janken_throw', ({ hand }) => {
@@ -99,6 +115,7 @@ module.exports = function registerSocketHandlers(io) {
 
       room.state = result.state;
       broadcastViews(io, room);
+      runCpu(io, room);
     });
 
     socket.on('choose_turn_order', ({ goFirst }) => {
@@ -112,6 +129,7 @@ module.exports = function registerSocketHandlers(io) {
       room.state = result.state;
       io.to(room.code).emit('game_start', { firstPlayerIndex: room.state.currentTurnPlayerIndex });
       broadcastViews(io, room);
+      runCpu(io, room);
     });
 
     socket.on('attempt_yaku', (payload) => {
@@ -136,6 +154,7 @@ module.exports = function registerSocketHandlers(io) {
       });
       broadcastViews(io, room);
       emitGameOverIfFinished(io, room);
+      runCpu(io, room);
     });
 
     socket.on('activate_dassou', (payload) => {
@@ -155,6 +174,7 @@ module.exports = function registerSocketHandlers(io) {
       io.to(room.code).emit('action_result', { ok: true, kind: 'dassou', cardsMoved: 5 });
       broadcastViews(io, room);
       emitGameOverIfFinished(io, room);
+      runCpu(io, room);
     });
 
     socket.on('activate_kimagure', (payload) => {
@@ -174,6 +194,7 @@ module.exports = function registerSocketHandlers(io) {
       io.to(room.code).emit('action_result', { ok: true, kind: 'kimagure', cardsMoved: 2 });
       broadcastViews(io, room);
       emitGameOverIfFinished(io, room);
+      runCpu(io, room);
     });
 
     socket.on('pass_turn', () => {
@@ -190,6 +211,7 @@ module.exports = function registerSocketHandlers(io) {
       io.to(room.code).emit('action_result', { ok: true, kind: 'pass' });
       broadcastViews(io, room);
       emitGameOverIfFinished(io, room);
+      runCpu(io, room);
     });
 
     socket.on('pk_action', (payload) => {
@@ -206,9 +228,38 @@ module.exports = function registerSocketHandlers(io) {
       room.state = { ...room.state, players: result.players, pk: result.pk };
       room.state = pkEngine.resolvePkRoundIfBothActed(room.state);
 
-      io.to(room.code).emit('action_result', { ok: true, kind: 'pk_action' });
+      io.to(room.code).emit('action_result', {
+        ok: true,
+        kind: result.yaku ? (result.yaku.category === 'pair' ? 'pair' : 'yaku') : 'pass',
+        yakuName: result.yaku ? result.yaku.name : undefined,
+        cardsMoved: result.yaku ? result.yaku.cardCount : undefined,
+      });
       broadcastViews(io, room);
       emitGameOverIfFinished(io, room);
+      runCpu(io, room);
+    });
+
+    socket.on('request_rematch', () => {
+      const ctx = requireActiveRoom(socket);
+      if (ctx.error) return socket.emit('error', { code: ctx.error, message: ctx.error });
+      const { room, playerIndex } = ctx;
+
+      if (room.state.phase !== 'finished') {
+        return socket.emit('error', { code: 'WRONG_PHASE', message: 'WRONG_PHASE' });
+      }
+
+      room.rematchVotes = room.rematchVotes || [false, false];
+      room.rematchVotes[playerIndex] = true;
+      if (room.isCpuRoom) room.rematchVotes[1] = true; // CPUは常に再戦OK
+
+      if (room.rematchVotes[0] && room.rematchVotes[1]) {
+        room.rematchVotes = [false, false];
+        room.state = turnManager.createGame(Math.random);
+        broadcastViews(io, room);
+        runCpu(io, room);
+      } else {
+        io.to(room.code).emit('rematch_status', { votes: room.rematchVotes });
+      }
     });
 
     socket.on('leave_room', () => {
