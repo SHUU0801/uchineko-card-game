@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useGameStore } from '../store/gameStore';
 import { translateErrorCode } from '../data/errorMessages';
-import { playDrawSound, playYakuSound, playPassSound, playErrorSound } from '../utils/sound';
+import { playDrawSound, playYakuSound, playPassSound, playErrorSound, playDassouSound, playKimagureSound } from '../utils/sound';
 
 const socketURL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
 
@@ -20,7 +20,7 @@ export const SocketManager = () => {
         setPhase,
         setView,
         setLastActionResult,
-        setGameOverInfo,
+        startJudging,
         clearGameOverInfo,
         setRematchVotes,
         setError,
@@ -77,6 +77,10 @@ export const SocketManager = () => {
             setLastActionResult(result);
             if (result.kind === 'pass') {
                 playPassSound();
+            } else if (result.kind === 'dassou') {
+                playDassouSound();
+            } else if (result.kind === 'kimagure') {
+                playKimagureSound();
             } else {
                 playYakuSound();
             }
@@ -88,7 +92,7 @@ export const SocketManager = () => {
         };
 
         const onGameOver = (info) => {
-            setGameOverInfo(info);
+            startJudging(info);
         };
 
         const onOpponentLeft = () => {

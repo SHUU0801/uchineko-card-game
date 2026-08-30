@@ -10,7 +10,7 @@ import { PkOverlay } from './PkOverlay';
 import { YakuListButton } from './YakuListButton';
 import { useNewCardIds } from '../utils/useNewCardIds';
 
-export function Board() {
+export function Board({ readOnly = false }) {
   const view = useGameStore((s) => s.view);
   const roomCode = useGameStore((s) => s.roomCode);
   const selection = useGameStore((s) => s.selection);
@@ -21,6 +21,7 @@ export function Board() {
   const errorMessage = useGameStore((s) => s.errorMessage);
   const clearError = useGameStore((s) => s.clearError);
   const opponentLeft = useGameStore((s) => s.opponentLeft);
+  const hideResultBoard = useGameStore((s) => s.hideResultBoard);
 
   const myHandNewIds = useNewCardIds(view ? view.me.hand : []);
   const myFieldNewIds = useNewCardIds(view ? view.me.field : []);
@@ -60,7 +61,10 @@ export function Board() {
 
   let turnBannerClass = 'turn-banner turn-banner-opponent';
   let turnBannerText = 'あいてのばん';
-  if (view.phase === 'pk') {
+  if (view.phase === 'finished') {
+    turnBannerClass = 'turn-banner turn-banner-opponent';
+    turnBannerText = 'たいきょくしゅうりょう（ばんめんのきろく）';
+  } else if (view.phase === 'pk') {
     turnBannerClass = 'turn-banner turn-banner-pk';
     turnBannerText = isMyPkTurn ? 'サドンデス：きみのばん' : 'サドンデス：あいてのばん';
   } else if (isMyTurn) {
@@ -70,6 +74,18 @@ export function Board() {
 
   return (
     <div className="max-w-3xl mx-auto p-4 flex flex-col gap-3">
+      {readOnly && (
+        <button onClick={hideResultBoard} className="game-btn game-btn-neutral text-sm self-start py-2 px-4">
+          ← けっかにもどる
+        </button>
+      )}
+
+      {lastActionResult && (lastActionResult.kind === 'dassou' || lastActionResult.kind === 'kimagure') && (
+        <div key={`fx-${lastActionSeq}`} className={`special-fx special-fx-${lastActionResult.kind}`}>
+          <span className="special-fx-emoji">{lastActionResult.kind === 'dassou' ? '🐾💨' : '🎲✨'}</span>
+        </div>
+      )}
+
       <div className={turnBannerClass}>{turnBannerText}</div>
 
       <div className="flex justify-between items-center text-[11px] text-[#7a6a5a]">

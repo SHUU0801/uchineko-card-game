@@ -5,10 +5,12 @@ import { LobbyScreen } from './components/LobbyScreen';
 import { SetupScreen } from './components/SetupScreen';
 import { JankenScreen } from './components/JankenScreen';
 import { Board } from './components/Board';
+import { RefereeScreen } from './components/RefereeScreen';
 import { GameOverScreen } from './components/GameOverScreen';
 
 export default function App() {
   const phase = useGameStore((s) => s.phase);
+  const resultBoardView = useGameStore((s) => s.resultBoardView);
 
   return (
     <div className="min-h-screen">
@@ -18,7 +20,8 @@ export default function App() {
       {phase === 'setup' && <SetupScreen />}
       {(phase === 'janken' || phase === 'janken_choice') && <JankenScreen />}
       {(phase === 'playing' || phase === 'pk') && <Board />}
-      {phase === 'finished' && <GameOverScreen />}
+      {phase === 'judging' && <RefereeScreen />}
+      {phase === 'finished' && (resultBoardView ? <Board readOnly /> : <GameOverScreen />)}
     </div>
   );
 }

@@ -6,6 +6,7 @@ export function GameOverScreen() {
   const myIndex = useGameStore((s) => s.myIndex);
   const rematchVotes = useGameStore((s) => s.rematchVotes);
   const reset = useGameStore((s) => s.reset);
+  const showResultBoard = useGameStore((s) => s.showResultBoard);
 
   if (!gameOverInfo) {
     return <div className="p-6 text-center text-[#7a6a5a]">けっかをまとめているよ…</div>;
@@ -30,6 +31,10 @@ export function GameOverScreen() {
           あいて <span className="text-lg text-[#c49a3c]">{finalScores[opponentIndex]}</span>匹
         </p>
       </div>
+
+      <button onClick={showResultBoard} className="game-btn game-btn-neutral">
+        ばんめんをみる
+      </button>
 
       <button onClick={() => socket.emit('request_rematch')} disabled={iVoted} className="game-btn game-btn-gold">
         もういっかい！

@@ -50,6 +50,39 @@ body {
   animation: card-glow 1.5s ease-in-out infinite;
 }
 
+/* ===== とくしゅアクション演出（だっそう／きまぐれ） ===== */
+.special-fx {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 60;
+}
+.special-fx-emoji {
+  font-size: 72px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+@keyframes dassou-run {
+  0% { transform: translateX(-130vw) rotate(-6deg) scale(0.9); opacity: 0; }
+  18% { opacity: 1; }
+  55% { transform: translateX(0) rotate(4deg) scale(1.15); opacity: 1; }
+  100% { transform: translateX(130vw) rotate(-6deg) scale(0.9); opacity: 0; }
+}
+.special-fx-dassou .special-fx-emoji {
+  animation: dassou-run 0.85s cubic-bezier(0.55, 0, 0.45, 1) forwards;
+}
+@keyframes kimagure-spin {
+  0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  30% { transform: scale(1.3) rotate(200deg); opacity: 1; }
+  60% { transform: scale(1) rotate(380deg); opacity: 1; }
+  100% { transform: scale(1) rotate(540deg); opacity: 0; }
+}
+.special-fx-kimagure .special-fx-emoji {
+  animation: kimagure-spin 0.9s ease-in-out forwards;
+}
+
 /* ===== ゲームボタン（フラット・丸み） ===== */
 .game-btn {
   font-family: 'M PLUS Rounded 1c', sans-serif;
