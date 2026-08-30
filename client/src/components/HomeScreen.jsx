@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { socket } from './SocketManager';
 import { useGameStore } from '../store/gameStore';
+import { RulesButton } from './RulesButton';
 
 export function HomeScreen() {
   const [joinCode, setJoinCode] = useState('');
@@ -17,6 +18,8 @@ export function HomeScreen() {
     <div className="max-w-sm mx-auto p-6 flex flex-col gap-6 text-center">
       <h1 className="text-2xl font-bold">🐱 うちねこカードゲーム</h1>
       <p className="text-xs text-slate-400">{connected ? 'サーバーに接続済み' : 'サーバーに接続中…'}</p>
+
+      <RulesButton />
 
       <button
         onClick={createRoom}

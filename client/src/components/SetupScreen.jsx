@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import { socket } from './SocketManager';
 import { Card } from './Card';
+import { DeckPile } from './DeckPile';
 import { YakuListButton } from './YakuListButton';
 
 export function SetupScreen() {
@@ -38,6 +39,10 @@ export function SetupScreen() {
       <p className="text-xs text-slate-400">
         8枚引きました。このうち4枚を表向きの「場札」にします。残りの4枚は非公開の「手札」になります。（{chosenCount} / 4 選択中）
       </p>
+
+      <div className="flex justify-center">
+        <DeckPile id="deck-pile-setup" count={view.me.deckCount} label="自分の山札（残り）" />
+      </div>
 
       <div className="flex gap-2 flex-wrap justify-center">
         {view.me.hand.map((card) => (

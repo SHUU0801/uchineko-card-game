@@ -1,7 +1,29 @@
+import { useLayoutEffect, useRef } from 'react';
 import { cardLabel, colorToBgClass, cardEmoji } from '../data/masterData';
 
-export function Card({ card, faceDown = false, selected = false, disabled = false, onClick, small = false, glow = false }) {
+export function Card({ card, faceDown = false, selected = false, disabled = false, onClick, small = false, glow = false, flyFromId = null }) {
   const sizeClass = small ? 'w-14 h-20 text-[10px]' : 'w-20 h-28 text-xs';
+  const ref = useRef(null);
+
+  // 山札のパイル(flyFromId)からこのカードの最終位置まで飛んでくるモーション。
+  // マウント時に1回だけ再生する＝新しくドローされたカードだけに効く。
+  useLayoutEffect(() => {
+    if (!flyFromId || !ref.current) return;
+    const source = document.getElementById(flyFromId);
+    if (!source) return;
+    const sourceRect = source.getBoundingClientRect();
+    const targetRect = ref.current.getBoundingClientRect();
+    const dx = sourceRect.left + sourceRect.width / 2 - (targetRect.left + targetRect.width / 2);
+    const dy = sourceRect.top + sourceRect.height / 2 - (targetRect.top + targetRect.height / 2);
+    ref.current.animate(
+      [
+        { transform: `translate(${dx}px, ${dy}px) scale(0.55)`, opacity: 0.3 },
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+      ],
+      { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (faceDown || !card) {
     return (
@@ -18,12 +40,13 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
 
   return (
     <button
+      ref={ref}
       type="button"
       onClick={onClick}
       disabled={disabled || !onClick}
       className={[
         sizeClass,
-        'animate-card-pop',
+        flyFromId ? '' : 'animate-card-pop',
         'rounded-lg border-2 flex flex-col items-center justify-center gap-0.5 font-bold text-white shadow transition-transform',
         bgClass,
         selected

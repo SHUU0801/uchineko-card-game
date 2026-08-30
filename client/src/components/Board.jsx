@@ -3,10 +3,12 @@ import { HandZone } from './Zone/HandZone';
 import { FieldZone } from './Zone/FieldZone';
 import { HouseZone } from './Zone/HouseZone';
 import { OpponentHandBack } from './Zone/OpponentHandBack';
+import { DeckPile } from './DeckPile';
 import { ActionBar } from './ActionBar';
 import { KimagurePicker } from './KimagurePicker';
 import { PkOverlay } from './PkOverlay';
 import { YakuListButton } from './YakuListButton';
+import { useNewCardIds } from '../utils/useNewCardIds';
 
 export function Board() {
   const view = useGameStore((s) => s.view);
@@ -19,6 +21,12 @@ export function Board() {
   const errorMessage = useGameStore((s) => s.errorMessage);
   const clearError = useGameStore((s) => s.clearError);
   const opponentLeft = useGameStore((s) => s.opponentLeft);
+
+  // 山札から新しく増えたカード（ドロー・場札補充）を検出し、山札パイルから飛んでくる演出をつける。
+  // viewがまだ無い最初の一瞬でもフックの呼び出し順は変えない。
+  const myHandNewIds = useNewCardIds(view ? view.me.hand : []);
+  const myFieldNewIds = useNewCardIds(view ? view.me.field : []);
+  const opponentFieldNewIds = useNewCardIds(view ? view.opponent.field : []);
 
   const isMyTurn = view ? view.phase === 'playing' && view.currentTurnPlayerIndex === useGameStore.getState().myIndex : false;
   const isMyPkTurn = view ? view.phase === 'pk' && view.pk && !view.pk.myActed : false;
@@ -103,8 +111,18 @@ export function Board() {
       )}
 
       <div className="space-y-2">
-        <OpponentHandBack count={view.opponent.handCount} />
-        <FieldZone label="相手の場札" cards={view.opponent.field} />
+        <div className="flex items-start gap-3">
+          <DeckPile id="deck-pile-opponent" count={view.opponent.deckCount} label="相手の山札" />
+          <div className="flex-1 space-y-2">
+            <OpponentHandBack count={view.opponent.handCount} />
+            <FieldZone
+              label="相手の場札"
+              cards={view.opponent.field}
+              newCardIds={opponentFieldNewIds}
+              flyFromId="deck-pile-opponent"
+            />
+          </div>
+        </div>
         <HouseZone label="相手のハウス" cards={view.opponent.house} />
       </div>
 
@@ -112,21 +130,30 @@ export function Board() {
 
       <div className="space-y-2">
         <HouseZone label="自分のハウス" cards={view.me.house} />
-        <FieldZone
-          label="自分の場札"
-          cards={view.me.field}
-          selectable={isMyTurn || isMyPkTurn}
-          selectedIds={selection.fieldCardIds}
-          onToggle={toggleFieldCardSelection}
-          glowIds={glowFieldIds}
-        />
-        <HandZone
-          cards={view.me.hand}
-          selectedHandCardId={selection.handCardId}
-          onSelectHandCard={selectHandCard}
-          disabled={!isMyTurn}
-          glowIds={glowHandIds}
-        />
+        <div className="flex items-start gap-3">
+          <DeckPile id="deck-pile-me" count={view.me.deckCount} label="自分の山札" />
+          <div className="flex-1 space-y-2">
+            <FieldZone
+              label="自分の場札"
+              cards={view.me.field}
+              selectable={isMyTurn || isMyPkTurn}
+              selectedIds={selection.fieldCardIds}
+              onToggle={toggleFieldCardSelection}
+              glowIds={glowFieldIds}
+              newCardIds={myFieldNewIds}
+              flyFromId="deck-pile-me"
+            />
+            <HandZone
+              cards={view.me.hand}
+              selectedHandCardId={selection.handCardId}
+              onSelectHandCard={selectHandCard}
+              disabled={!isMyTurn}
+              glowIds={glowHandIds}
+              newCardIds={myHandNewIds}
+              flyFromId="deck-pile-me"
+            />
+          </div>
+        </div>
       </div>
 
       {view.phase === 'playing' && <ActionBar />}
