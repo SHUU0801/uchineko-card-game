@@ -34,11 +34,9 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
   }
 
   const isSpecial = card.type === 'dassou' || card.type === 'kimagure';
-  const isAllmighty = card.type === 'allmighty';
 
   let bgClass = '';
   if (isSpecial) bgClass = 'bg-[#2a211a]';
-  else if (isAllmighty) bgClass = 'bg-[#c49a3c]';
   else bgClass = colorToBgClass(card.color);
 
   let borderClass = 'border-[#4a3a2e]';
@@ -64,7 +62,7 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
       ].filter(Boolean).join(' ')}
     >
       <span className={emojiSize}>{cardEmoji(card)}</span>
-      <span className={`text-center leading-tight px-1 font-bold ${isAllmighty ? 'text-[#1a1210]' : ''}`}>
+      <span className="text-center leading-tight px-1 font-bold">
         {cardLabel(card)}
       </span>
     </button>
