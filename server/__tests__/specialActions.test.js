@@ -113,17 +113,20 @@ describe('specialActions - だっそう', () => {
 });
 
 describe('specialActions - きまぐれ', () => {
-  it('discards both used cards entirely (never placed in any house), bounces the targeted opponent field card, and refills the actor field', () => {
+  it('discards both used cards entirely (never placed in any house), bounces the targeted opponent field card, and refills both fields back to 4', () => {
     const k = kimagure();
     const attr = cat('attr1');
     const refill = cat('refill');
     const oppTarget = cat('opp_target');
-    const oppOther = cat('opp_other');
+    const oppA = cat('opp_a');
+    const oppB = cat('opp_b');
+    const oppC = cat('opp_c');
+    const oppRefill = cat('opp_refill');
 
     const state = {
       players: [
         { deck: [refill], hand: [k], field: [attr], house: [] },
-        { deck: [], hand: [], field: [oppTarget, oppOther], house: [] },
+        { deck: [oppRefill], hand: [], field: [oppTarget, oppA, oppB, oppC], house: [] },
       ],
     };
 
@@ -146,9 +149,14 @@ describe('specialActions - きまぐれ', () => {
     expect(everyCard.some((c) => c.id === k.id)).toBe(false);
     expect(everyCard.some((c) => c.id === attr.id)).toBe(false);
 
-    // target field card returned to opponent's own deck
-    expect(p1.field).toEqual([oppOther]);
-    expect(p1.deck.map((c) => c.id)).toEqual([oppTarget.id]);
+    // target field card returned to opponent's own deck, and the opponent's field is
+    // immediately refilled back to 4 (it should never sit at 3 waiting for their turn).
+    // Which exact card ends up back in the field vs. the deck depends on the shuffle,
+    // so only assert on the deterministic totals/membership.
+    expect(p1.field.length).toBe(4);
+    expect(p1.deck.length).toBe(1);
+    const p1CardIds = [...p1.field, ...p1.deck].map((c) => c.id).sort();
+    expect(p1CardIds).toEqual([oppA.id, oppB.id, oppC.id, oppRefill.id, oppTarget.id].sort());
   });
 
   it('rejects when neither hand nor field card is the kimagure card', () => {

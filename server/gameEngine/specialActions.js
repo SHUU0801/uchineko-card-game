@@ -124,6 +124,11 @@ function validateAndApplyKimagure(gameState, playerIndex, { handCardId, fieldCar
   opponent.field = targetResult.rest;
   opponent.deck = shuffle([...opponent.deck, targetResult.card]);
 
+  // 相手の場も1枚減った分をすぐ4枚に補充する（自分の場と同様、場は常に4枚を保つ）。
+  const opponentRefilled = refillTo(opponent.field, opponent.deck, 4);
+  opponent.field = opponentRefilled.field;
+  opponent.deck = opponentRefilled.deck;
+
   const refilled = refillTo(player.field, player.deck, 4);
   player.field = refilled.field;
   player.deck = refilled.deck;
