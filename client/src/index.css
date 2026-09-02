@@ -50,6 +50,18 @@ body {
   animation: card-glow 1.5s ease-in-out infinite;
 }
 
+/* ===== カードの柄（無地だと違和感が出るため、薄い斜め織り目テクスチャを重ねる） ===== */
+.card-pattern {
+  background-image: repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0px,
+      rgba(255, 255, 255, 0.07) 1.5px,
+      transparent 1.5px,
+      transparent 7px
+    ),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.06) 0px, rgba(0, 0, 0, 0.06) 1.5px, transparent 1.5px, transparent 7px);
+}
+
 /* ===== とくしゅアクション演出（だっそう／きまぐれ） ===== */
 .special-fx {
   position: fixed;

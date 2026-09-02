@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
-import { cardLabel, colorToBgClass, cardEmoji } from '../data/masterData';
+import { cardLabel, colorToBgClass } from '../data/masterData';
+import { cardIcon } from '../data/cardIcons';
 
 export function Card({ card, faceDown = false, selected = false, disabled = false, onClick, small = false, glow = false, flyFromId = null }) {
   const ref = useRef(null);
@@ -23,11 +24,11 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
   }, []);
 
   const sizeClass = small ? 'w-14 h-20 text-[10px]' : 'w-20 h-28 text-xs';
-  const emojiSize = small ? 'text-lg' : 'text-2xl';
+  const iconSizeClass = small ? 'w-6 h-6' : 'w-9 h-9';
 
   if (faceDown || !card) {
     return (
-      <div className={`${sizeClass} rounded-lg bg-[#2a211a] border border-[#4a3a2e] flex items-center justify-center select-none`}>
+      <div className={`${sizeClass} card-pattern rounded-lg bg-[#2a211a] border border-[#4a3a2e] flex items-center justify-center select-none`}>
         <span className="text-lg opacity-30">🐾</span>
       </div>
     );
@@ -51,6 +52,7 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
       disabled={disabled || !onClick}
       className={[
         sizeClass,
+        'card-pattern',
         flyFromId ? '' : 'animate-card-pop',
         'rounded-lg border-2 flex flex-col items-center justify-center gap-0.5 font-bold text-white transition-all',
         bgClass,
@@ -61,7 +63,7 @@ export function Card({ card, faceDown = false, selected = false, disabled = fals
         disabled ? 'opacity-40' : '',
       ].filter(Boolean).join(' ')}
     >
-      <span className={emojiSize}>{cardEmoji(card)}</span>
+      <img src={cardIcon(card)} alt="" draggable="false" className={`${iconSizeClass} drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]`} />
       <span className="text-center leading-tight px-1 font-bold">
         {cardLabel(card)}
       </span>

@@ -64,6 +64,14 @@ export function RulesButton() {
             <Section title="けっちゃく">
               <p>8ターンでどうてんならサドンデス。さがつくまでくりかえすよ</p>
             </Section>
+
+            <p className="text-[10px] text-[#5a4a3a] mt-4">
+              カードのアイコン：
+              <a href="https://game-icons.net" target="_blank" rel="noreferrer" className="underline">
+                game-icons.net
+              </a>
+              （Lorc, Delapouite / CC BY 3.0）
+            </p>
           </div>
         </div>
       )}

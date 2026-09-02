@@ -37,32 +37,3 @@ export function cardLabel(card) {
 }
 
 export const ALLMIGHTY_COLORS = ['red', 'blue', 'green', 'purple', 'orange', 'navy'];
-
-// 文字だけだと属性の見分けがつきにくいため、属性ごとに絵文字アイコンを添える（軽量な「イラスト」代替）。
-const ATTRIBUTE_EMOJI = {
-  gorogoron: '😽',
-  daran: '😪',
-  peropero: '👅',
-  wakuwaku: '✨',
-  punipuni: '🐾',
-  momimomi: '🤲',
-  fuwaa: '🥱',
-  suyasuya: '💤',
-  mogumogu: '🍖',
-  nobinobi: '🙆',
-  chokon: '🐈',
-  suppori: '📦',
-};
-
-export function attributeEmoji(attributeId) {
-  return ATTRIBUTE_EMOJI[attributeId] || '🐱';
-}
-
-export function cardEmoji(card) {
-  if (!card) return '🐾';
-  if (card.type === 'cat') return attributeEmoji(card.attribute);
-  if (card.type === 'allmighty') return '⭐';
-  if (card.type === 'dassou') return '💨';
-  if (card.type === 'kimagure') return '🎲';
-  return '🐱';
-}
